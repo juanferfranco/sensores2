@@ -4,8 +4,10 @@ Curso Sensores 2 2018-20
 ¿Para qué sirve este curso?
 -----------------------------
 Este curso sirve para dos asuntos:
+
 1. Para aprender técnicas de programación avanzadas de sistemas embebidos utilizando sistemas operativos de tiempo real.
-2. Para aprender a integrar a sistemas de cómputo sensores y actuadores inteligentes que utilizan buses de comunicación.
+
+2. Para aprender a integrar sistemas de cómputo con sensores y actuadores inteligentes que utilizan buses de comunicación.
 
 
 Descripción del curso
