@@ -170,12 +170,69 @@ de nuevo el ESP-IDF::
     git clone --recursive https://github.com/espressif/esp-idf.git
 
 
-Configuración de Visual Studio Code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Configuración de Visual Studio Code (VSC)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 A continuación describiré los pasos necesarios para configurar la herramienta. Esta sección supone que los pasos anteriores se siguieron y el resultado 
-fué exitoso. 
+fué exitoso. Esto es importante porque la función de VSC es llamar automáticamente los mismos comandos que estamos llamando manualme nte. 
 
 1. Lo primero que debemos hacer es descargar `visual studio code <https://code.visualstudio.com/>`__.
+
+2. Luego se deben instalar algunas extensiones: C/C++ for Visual Studio Code, Native Debug (para el futuro, pero nosotros no 
+utilizaremos el debugger porque no tenemos una interfaz JTAG), Serial Monitor como muestra la siguiente figura:
+
+.. image:: ../_static/extensiones.jpeg
+
+3. Ahora configuramos la terminal desde la que VSC llamará los comandos. Seleccionar ``File -> Preferences -> Settings`` y adicionar el siguiente texto a las 
+preferencias actuales::
+    
+        "terminal.integrated.shell.windows": "D:/ESP32/msys32/usr/bin/bash.exe",
+        "terminal.integrated.shellArgs.windows": [
+            "--login",
+        ],
+        "terminal.integrated.env.windows": {
+            "CHERE_INVOKING": "1",
+            "MSYSTEM": "MINGW32",
+        }
+    
+Es de notar la ruta de la aplicación ``bash.exe`` en mi sistema: ``D:/ESP32/msys32/usr/bin/bash.exe``. En mi caso, los *Settings* quedan así::
+
+    {
+        "terminal.integrated.shell.windows": "D:/ESP32/msys32/usr/bin/bash.exe",
+        "terminal.integrated.shellArgs.windows": [
+            "--login",
+        ],
+        "terminal.integrated.env.windows": {
+            "CHERE_INVOKING": "1",
+            "MSYSTEM": "MINGW32",
+        },
+        "arduino.path": "C:/Users/JuanFernandoFrancoHi/arduino-1.8.5-windows/arduino-1.8.5",
+        "arduino.logLevel": "info", "arduino.enableUSBDetection": true, 
+        "C_Cpp.intelliSenseEngine": "Tag Parser",
+        "files.autoSave": "afterDelay",
+        "python.pythonPath": "C:\\Users\\JuanFernandoFrancoHi\\AppData\\Local\\Programs\\Python\\Python36-32\\python.exe",
+        "arduino.additionalUrls": [
+            "https://git.oschina.net/dfrobot/FireBeetle-ESP32/raw/master/package_esp32_index.json",
+            "http://arduino.esp8266.com/stable/package_esp8266com_index.json",
+            "https://github.com/stm32duino/BoardManagerFiles/raw/master/STM32/package_stm_index.json",
+            "https://raw.githubusercontent.com/VSChina/azureiotdevkit_tools/master/package_azureboard_index.json"
+        ]
+    }
+
+4. Verificamos que la terminal esté correctamente configurada. Seleccionamos el menú ``View --> Output`` y finalmente clock en Terminal. El resutado debe ser 
+similar al que muestra la figura:
+
+.. image:: ../_static/terminal.jpeg
+
+Iniciar un nuevo proyecto en Visual Studio Code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1. Copiamos de la carpeta de ejemplos del ESP-IDF el proyecto hello_world::
+
+    cd ~/esp
+    mkdir vscode-workspace
+    cd vscode-workspace
+    cp -r $IDF_PATH/examples/get-started/hello_world .
+
+2. copiamos la carpeta `.vscode <./.vscode.zip>`__ en el directorio hello_world
 
 Ejercicio 2: análisis del ejemplo 
 ------------------------------------
