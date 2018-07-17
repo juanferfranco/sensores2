@@ -232,7 +232,30 @@ Iniciar un nuevo proyecto en Visual Studio Code
     cd vscode-workspace
     cp -r $IDF_PATH/examples/get-started/hello_world .
 
-2. copiamos la carpeta `.vscode <https://drive.google.com/open?id=1l-HYwUgtfNcS21sKReE8H1UyWgclgFZ3>`__ en el directorio hello_world
+2. Copiamos la carpeta `.vscode <https://drive.google.com/open?id=1l-HYwUgtfNcS21sKReE8H1UyWgclgFZ3>`__ en el directorio hello_world. Esta carpeta tiene dos 
+archivos: ``c_cpp_properties.json`` y ``tasks.json``. El archivo ``c_cpp_properties.json`` tiene el *path* de los *include* del proyecto, del ESP-IDF, del 
+toolchain, entre otros.
+
+.. note::
+    No olvide ajustar los path con la ruta adecuada en su sistema.
+
+    Tenga en cuenta que este archivo lo podrá seguir reutilizando con cada proyecto que cree.
+
+El archivo ``tasks.json`` tiene configuradas las tareas para compilar, programar, entre otras. En este caso vamos a editar las siguiente tareas:
+
+* ``flash app`` y ``build app``: cambiamos uno de los ``args`` por -jX donde X será el número de *cores* disponibles en su computador. En mi caso, X será 4.
+* ``monitor`` y ``menuconfig``: cambiar el *path* de ``command`` para ajustarlo a su sistema. En mi caso ``"D:/ESP32/msys32/mingw32.exe"`` 
+
+3. Abrimos la carpeta hello_world en VSC: ``File -> Open Folder``. Luego buscamos en el *explorer* de VSC el archivo ``hello_world_main.c``. Si VSC reconoce 
+los *includes* no deben aparecer líneas verdes bajo las líneas ``#include`` como muestra la figura:
+
+.. image:: ../_static/vscIncludesexample.jpeg
+
+4. Finalmente estamos listos para probar las tareas. Seleccione el menú ``Tasks -> Run Tasks`` o la tecla F12. Deben aparecer las tareas como se ve en la figura:
+
+.. image:: ../_static/vscTareas.jpeg
+
+
 
 Ejercicio 2: análisis del ejemplo 
 ------------------------------------
