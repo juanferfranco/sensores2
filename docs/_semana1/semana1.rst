@@ -269,3 +269,229 @@ los *includes* no deben aparecer líneas verdes bajo las líneas ``#include`` co
 
 Ejercicio 2: análisis del ejemplo 
 ------------------------------------
+En este ejercicio vamos a analizar un poco el código del Ejercicio 1.
+
+.. code-block:: c
+   :lineno-start: 9
+
+    #include <stdio.h>
+    #include "freertos/FreeRTOS.h"
+    #include "freertos/task.h"
+    #include "esp_system.h"
+    #include "esp_spi_flash.h"
+
+
+    void app_main()
+    {
+        printf("Hola sensores 2!\n");
+
+        /* Print chip information */
+        esp_chip_info_t chip_info;
+        esp_chip_info(&chip_info);
+        printf("This is ESP32 chip with %d CPU cores, WiFi%s%s, ",
+                chip_info.cores,
+                (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
+                (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
+
+        printf("silicon revision %d, ", chip_info.revision);
+
+        printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
+                (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
+
+        for (int i = 10; i >= 0; i--) {
+            printf("Restarting in %d seconds...\n", i);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+        }
+        printf("Restarting now.\n");
+        fflush(stdout);
+        esp_restart();
+    }
+
+Varios puntos a considerar:
+
+Lo primero que debemos notar es el punto de entrada del programa, la función ``app_main()``, línea 16. Al igual que el *framework* de arduino, 
+el punto de entrada de la aplicación es diferente a la función ``main()``. Esto ocurre porque la función ``main()``
+hace parte del código del *framework* y ese éste quien llamará el código de la aplicación del usuario.
+
+En la línea 18 se observa la función ``printf`` de la biblioteca ``#include <stdio.h>``. Esta biblioteca permite enviar mensajes a la terminal serial a través 
+de la UART0 del ESP32.
+
+En la línea 21 se observa la definición de una estructura de datos de tipo ``esp_chip_info_t``. El lenguaje C no soporta de manera nativa objetos, por tanto, 
+es necesario crear estructuras de datos en memoria (simuladondo objetos) e inicializarlas empleando funciones, ``esp_chip_info(&chip_info);``, a las cuales 
+se pasan las estructuras de datos por REFERENCIAS: ``&chip_info``. En este caso el operador ``&`` obtiene la dirección de la variable ``chip_info``. El 
+siguiente código muestra la definición de la estructura de datos ``esp_chip_info_t``. Es de notar que la estructura de datos anida otra estructura de datos 
+``esp_chip_model_t``:
+
+.. code-block:: c
+   :lineno-start: 1
+
+    /**
+    * @brief The structure represents information about the chip
+    */
+    typedef struct {
+        esp_chip_model_t model;  //!< chip model, one of esp_chip_model_t
+        uint32_t features;       //!< bit mask of CHIP_FEATURE_x feature flags
+        uint8_t cores;           //!< number of CPU cores
+        uint8_t revision;        //!< chip revision number
+    } esp_chip_info_t;    
+
+Este código muestra la implementación de la función ``esp_chip_info``:
+
+.. code-block:: c
+   :lineno-start: 1
+
+    static void get_chip_info_esp32(esp_chip_info_t* out_info)
+    {
+        out_info->model = CHIP_ESP32;
+        uint32_t reg = REG_READ(EFUSE_BLK0_RDATA3_REG);
+        memset(out_info, 0, sizeof(*out_info));
+        if ((reg & EFUSE_RD_CHIP_VER_REV1_M) != 0) {
+            out_info->revision = 1;
+        }
+        if ((reg & EFUSE_RD_CHIP_VER_DIS_APP_CPU_M) == 0) {
+            out_info->cores = 2;
+        } else {
+            out_info->cores = 1;
+        }
+        out_info->features = CHIP_FEATURE_WIFI_BGN;
+        if ((reg & EFUSE_RD_CHIP_VER_DIS_BT_M) == 0) {
+            out_info->features |= CHIP_FEATURE_BT | CHIP_FEATURE_BLE;
+        }
+        int package = (reg & EFUSE_RD_CHIP_VER_PKG_M) >> EFUSE_RD_CHIP_VER_PKG_S;
+        if (package == EFUSE_RD_CHIP_VER_PKG_ESP32D2WDQ5 ||
+            package == EFUSE_RD_CHIP_VER_PKG_ESP32PICOD2 ||
+            package == EFUSE_RD_CHIP_VER_PKG_ESP32PICOD4) {
+            out_info->features |= CHIP_FEATURE_EMB_FLASH;
+        }
+    }
+
+    void esp_chip_info(esp_chip_info_t* out_info)
+    {
+        // Only ESP32 is supported now, in the future call one of the
+        // chip-specific functions based on sdkconfig choice
+        return get_chip_info_esp32(out_info);
+    }
+
+La variable ``out_info`` es un puntero, es decir, una variable que almancena direcciones de otras variables y puede estar implementada 
+en los registros del procesador o en el *stack* (Pregunta Juanito: ¿Qué?). En este caso ``out_info``, almacena la dirección de una variable de 
+tipo ``esp_chip_info_t``. Note que luego el contenido de ``out_info`` se pasa otra variable ``out_info`` diferente a la primera. Esto ocurre al llamar 
+la función ``get_chip_info_esp32(out_info);`` (Pregunta Juanito: no charlemos tan pesado, ¿Cómo así?). No pierda de vista que 
+la dirección que estamos pasando de aquí para allá no es más que la dirección de ``chip_info``. Finalmente, observe cómo se acceden las posiciones 
+de memoria de la variable ``chip_info`` mediante el puntero ``out_info``, por ejemplo ``out_info->features`` modifica la posición features de ``chip_info`` 
+mediante el operador ``->`` (Pregunta el profe a Juanito: ¿Eres feliz?).
+
+En la línea 23 se observan varias cosas interesante:
+Primero, el uso de cadenas formateadas: ``"This is ESP32 chip with %d CPU cores, WiFi%s%s, "``. El resultado de ``printf`` es:
+``This is ESP32 chip with 2 CPU cores, WiFi/BT/BLE,``. Note que %d, %s%s no aparecen. En vez de eso, aparece el número 2 en vez de %d y la cadena ``/BT/BLE`` 
+en vez de %s%s. Lo que ocurre es que ``printf`` es capaz de detectar algunos caracteres especiales y cambiarlos por el resultado de evaluar 
+``chip_info.cores``, ``(chip_info.features & CHIP_FEATURE_BT) ? "/BT" : ""`` y ``(chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "")``. 
+Estas dos últimas expresiones son condicionales que evaluan la condición de la izquierda del signo ``?``. Si la condición es verdadera, la expresión 
+devuelve el resultado de la expresión a la izquierda del signo ``:``, de lo contrario, devuelve lo que esté a la derecha.
+
+En la línea 35 se observa la función ``vTaskDelay(1000 / portTICK_PERIOD_MS);``. Esta función es un llamado al sistema operativo, ``FreeRTOS``, para 
+solicitar generar un retardo de 1 segundo. Para medir los tiempos, ```FreeRTOS`` genera una base de tiempo o una interrupción periódica llamada ``tick`` del 
+sistema. La operación ``1000 / portTICK_PERIOD_MS`` calcula la cantidad de *ticks* que hay en 1000 milli segundos. De esta manera le informamos al sistema 
+operativo cuántos *ticks* tardará el retardo.
+
+La línea 38 muestra la función ``fflush(stdout);``. Esta función bloquea el programa hastas que todos los caracteres pendientes por transmitir sean enviados 
+a través de la UART0. Pregunta Juanito: ¿Pero entonces qué hace ``printf``? ¿No se supone que transmite una información por la UART0? En realidad, tal como 
+ocurre con el *framework* de arduino, la función ``printf`` realmente copia la información a un *buffer* de transmisión. Como el ESP32 corre tan rápido, 
+no es posible garantizar que al llegar al código de máquina correspondiente al la línea 38 toda la información se haya transmitido. En consecuencia, la función 
+``fflush(stdout);`` hará que el ESP32 espere hasta que último dato se haya enviado.
+
+En la línea 39, la función ``esp_restart`` permite reiniciar el ESP32 por software, es decir, no es necesario una acción por hardware para obligar al ESP32 
+a ejecutar de nuevo el programa almacenado.
+
+Ejercicio 3: Entorno profesional de desarrollo 
+------------------------------------------------
+
+En el ejercicio 1 hablé de la herramienta `visualGDB <https://visualgdb.com/>`__. Esta herramienta es muy práctica y útil, aunque no es gratis. Para utilizarla 
+se recomienda descargar Visual Studio Enterprice, que es gratuita para la comunidad Unviersitaria de la escuela de Ingeniería, a través de la plataforma 
+`Microsoft Imagine <https://goo.gl/8WRiec>`__ ingresando con el correo y clave institucional.
+
+Luego descargar e instalar `VisualGDB 5.4 Preview 3 <http://sysprogs.com/files/visualgdb/VisualGDB-5.4-preview3.msi>`__.
+
+Crear un projecto seleccionado la opción que muestra la figura:
+
+.. image:: ../_static/visualGDBProjectWizard.jpeg
+
+visualGDB utiliza su propio toolchain precompilado que debe ser descargado al momento de crear el proyecto. Una vez descargado, se selecciona como muestra 
+la figura:
+
+.. image:: ../_static/toolchainVGB.jpeg
+
+Seleccionar como *Project Sample* el proyecto *blink*:
+
+.. image:: ../_static/blinkProject.jpeg
+
+Finalmente seleccionar el *Debug Method*:
+
+.. image:: ../_static/debugMethodVGDB.jpeg
+
+Al llegar a este punto estamos listos para desarrollar. Pregunta Juanito: ¿Y el tutorial para configurar la herramienta? No hay tutorial, la herramienta 
+ya está lista para ser utilizada. Entonces procedemos así:
+
+* Click derecho en el nombre del proyecto (ver el cuadro Solution Explorer). Seleccionar VisualGDB Project Properties.
+* Configurar el ESP-IDF. Esto no es más que una versión más sencilla de menuconfig.
+* Seleccionar ESP-IDF Project y configurar como muestra la figura, no olvidar dar clock en Apply y OK para salvar los cambios.
+
+.. image:: ../_static/menuconfigVGDB.jpeg
+
+* Para compilar el programa seleccionar: ``Build->Build Solution``.
+* Para almacenar el programa en la memoria: ``Debug->Start Without Debugging``.
+
+A continuación se muestra el código fuente de la aplicación:
+
+.. code-block:: c
+   :lineno-start: 9
+
+    #include <stdio.h>
+    #include "freertos/FreeRTOS.h"
+    #include "freertos/task.h"
+    #include "driver/gpio.h"
+    #include "sdkconfig.h"
+
+    /* Can run 'make menuconfig' to choose the GPIO to blink,
+    or you can edit the following line and set a number here.
+    */
+    #define BLINK_GPIO CONFIG_BLINK_GPIO
+
+    void blink_task(void *pvParameter)
+    {
+        /* Configure the IOMUX register for pad BLINK_GPIO (some pads are
+        muxed to GPIO on reset already, but some default to other
+        functions and need to be switched to GPIO. Consult the
+        Technical Reference for a list of pads and their default
+        functions.)
+        */
+        gpio_pad_select_gpio(BLINK_GPIO);
+        /* Set the GPIO as a push/pull output */
+        gpio_set_direction(BLINK_GPIO, GPIO_MODE_OUTPUT);
+        while(1) {
+            /* Blink off (output low) */
+            gpio_set_level(BLINK_GPIO, 0);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            /* Blink on (output high) */
+            gpio_set_level(BLINK_GPIO, 1);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+        }
+    }
+
+    void app_main()
+    {
+        xTaskCreate(&blink_task, "blink_task", configMINIMAL_STACK_SIZE, NULL, 5, NULL);
+    }
+
+Ejercicio: analizar el código.
+
+
+
+
+
+
+
+
+
+
+
+
