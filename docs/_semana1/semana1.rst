@@ -251,11 +251,21 @@ los *includes* no deben aparecer líneas verdes bajo las líneas ``#include`` co
 
 .. image:: ../_static/vscIncludesexample.jpeg
 
-4. Finalmente estamos listos para probar las tareas. Seleccione el menú ``Tasks -> Run Tasks`` o la tecla F12. Deben aparecer las tareas como se ve en la figura:
+4. Estamos listos para probar las tareas. Seleccione el menú ``Tasks -> Run Tasks`` o la tecla F12. Deben aparecer las tareas como se ve en la figura:
 
 .. image:: ../_static/vscTareas.jpeg
 
+* Seleccionamos ``clean app`` para borrar compilaciones previas (si es que tenemos).
+* Seleccionamos ``menuconfig`` para configurar el *framework* a nuestro gusto. No olvide esperar la generación del archivo de configuración.
+* Seleccionamos ``build app`` para compilar la aplicación.
+* Seleccionamos ``flash app`` para almacenar el programa en la memoria *flash*.
+* Abrimos una terminal serial para verificar que efectivamente quedó programada la aplicación.
 
+5. Como ejercicio corto se recomienda realizar una pequeña modificación al código y repetir los pasos anteriores desde ``build app``.
+
+.. note::
+    Debe notar que al realizar modificaciones al código, la velocidad de compilación aumenta considerablemente porque ya no es necesario compilar 
+    todo el framework.
 
 Ejercicio 2: análisis del ejemplo 
 ------------------------------------
