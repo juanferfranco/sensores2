@@ -173,7 +173,7 @@ de nuevo el ESP-IDF::
 Configuración de Visual Studio Code (VSC)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 A continuación describiré los pasos necesarios para configurar la herramienta. Esta sección supone que los pasos anteriores se siguieron y el resultado 
-fué exitoso. Esto es importante porque la función de VSC es llamar automáticamente los mismos comandos que estamos llamando manualme nte. 
+fué exitoso. Esto es importante porque la función de VSC es llamar automáticamente los mismos comandos que estamos llamando manualmente. 
 
 1. Lo primero que debemos hacer es descargar `visual studio code <https://code.visualstudio.com/>`__.
 
@@ -232,7 +232,7 @@ Iniciar un nuevo proyecto en Visual Studio Code
     cd vscode-workspace
     cp -r $IDF_PATH/examples/get-started/hello_world .
 
-2. copiamos la carpeta `.vscode <./.vscode.zip>`__ en el directorio hello_world
+2. copiamos la carpeta `.vscode <https://drive.google.com/open?id=1l-HYwUgtfNcS21sKReE8H1UyWgclgFZ3>`__ en el directorio hello_world
 
 Ejercicio 2: análisis del ejemplo 
 ------------------------------------
