@@ -377,7 +377,7 @@ en los registros del procesador o en el *stack* (Pregunta Juanito: ¿Qué?). En 
 tipo ``esp_chip_info_t``. Note que luego el contenido de ``out_info`` se pasa otra variable ``out_info`` diferente a la primera. Esto ocurre al llamar 
 la función ``get_chip_info_esp32(out_info);`` (Pregunta Juanito: no charlemos tan pesado, ¿Cómo así?). No pierda de vista que 
 la dirección que estamos pasando de aquí para allá no es más que la dirección de ``chip_info``. Finalmente, observe cómo se acceden las posiciones 
-de memoria de la variable ``chip_info`` mediante el puntero ``out_info``, por ejemplo ``out_info->features`` modifica la posición features de ``chip_info`` 
+de memoria de la variable ``chip_info`` mediante el puntero ``out_info``, por ejemplo, ``out_info->features`` modifica la posición features de ``chip_info`` 
 mediante el operador ``->`` (Pregunta el profe a Juanito: ¿Eres feliz?).
 
 En la línea 23 se observan varias cosas interesante:
