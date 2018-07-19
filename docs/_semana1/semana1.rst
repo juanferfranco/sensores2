@@ -390,7 +390,7 @@ devuelve el resultado de la expresión a la izquierda del signo ``:``, de lo con
 
 En la línea 35 se observa la función ``vTaskDelay(1000 / portTICK_PERIOD_MS);``. Esta función es un llamado al sistema operativo, ``FreeRTOS``, para 
 solicitar generar un retardo de 1 segundo. Para medir los tiempos, ```FreeRTOS`` genera una base de tiempo o una interrupción periódica llamada ``tick`` del 
-sistema. La operación ``1000 / portTICK_PERIOD_MS`` calcula la cantidad de *ticks* que hay en 1000 milli segundos. De esta manera le informamos al sistema 
+sistema. La operación ``1000 / portTICK_PERIOD_MS`` calcula la cantidad de *ticks* que hay en 1000 mili segundos. De esta manera le informamos al sistema 
 operativo cuántos *ticks* tardará el retardo.
 
 La línea 38 muestra la función ``fflush(stdout);``. Esta función bloquea el programa hastas que todos los caracteres pendientes por transmitir sean enviados 
