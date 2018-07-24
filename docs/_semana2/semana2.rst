@@ -88,9 +88,11 @@ El siguiente código muestra un ejemplo típico de una arquitectura *background/
     }
 
 Es importante notar que el código anterior es bloqueante (Pregunta Juanito: ¿Qué es eso?). La función 
-``BSP_delay(BSP_TICKS_PER_SEC / 4U);`` consume todos los recursos de CPU en espera ocupada, es decir, esperamos 
-a que pase el tiempo sin hacer nada más. A esto también lo llamamos ``polling``. Recordar que al día de hoy conocemos 
-una excelente técnica de programación para lidiar con el problema anterior: lás máquinas de estado:
+``BSP_delay(BSP_TICKS_PER_SEC / 4U);`` consume todos los recursos de la CPU en espera ocupada. A esto también lo llamamos 
+``polling``. 
+
+
+¿Cómo superamos la espera ocupada? Utilizando la excelente técnica de programación conocida como máquinas de estado:
 
 .. code-block:: c
    :lineno-start: 1
@@ -133,9 +135,24 @@ una excelente técnica de programación para lidiar con el problema anterior: l�
         //return 0;
     }
 
-Antes de continuar debemos repasar un concepto fundamental: las condiciones de carrera. Estas condiciones se presentan 
-cuando dos entidades concurrentes compiten por un recurso haciendo que el estado del recurso dependa de la secuencia en 
-la cual se accede. El siguiente ejemplo 
+En ambos códigos, espera ocupada y máquinas de estado, la arquitectura *background/foreground* se puede entender como 
+ilustra la figura:
+
+.. image:: ../_static/fore-back-gound.jpeg
+   :scale: 40 %
+
+El código que enciende y apaga el LED corre en el *background*. Cuando ocurre la interrupción ``SysTick_Handler`` el 
+*background* será "despojado" de la CPU de la cual se apropiará (*preemption*) el servicio de atención a 
+la interrupción o ``ISR`` en el *foreground*. Una vez termine la ejecución de la ISR, el *backgound* retomará justo en el 
+punto en el cual fue "desalojado" (preempted). Note también que la comunicación entre el *background/foreground* se realiza 
+por medio de la variable ``l_tickCtr``. Adicionalmente, observe como la función BSP_tickCtr accede la variable. 
+Pregunta Juanito: ¿Por qué se hace de esa manera? Para evitar las condiciones de carrera.
+
+¿Qué son las condiciones de carrera?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Son condiciones que se  presentan cuando dos entidades concurrentes compiten por un recurso haciendo que el estado del 
+recurso dependa de la secuencia en la cual se accede. El siguiente ejemplo 
 ilustrará este asunto:
 
 .. code-block:: c 
@@ -273,16 +290,17 @@ Estrategia no recurso compartido:
     }
 
 La última estrategia permite acceder de manera individual y sólo con una operación de escritura los bits del puerto 
-de entrada salida. La estrategia funciona gracias a una "jugada" en hardware. La siguiente figura muestra una línea de 
-dirección y de datos dedicada a cada bit del puerto de entrada salida:
+de entrada salida. La estrategia funciona gracias a una "jugada" en hardware. La siguiente figura muestra la implementación 
+de los puertos de GPIO en el microcontrolador que estamos utilizando para realizar los ejemplos: TM4C123G de Texas 
+Instruments. Note que hay una línea de dirección y de datos dedicada a cada bit del puerto de entrada salida:
 
 .. image:: ../_static/gpioAtomic.jpeg
    :scale: 50 %
 
 Las líneas de dirección habilitan la escritura del bit. Por tanto, si se desea escribir el bit 2 del puerto, en las 
 línea correspondientes del bus de direcciones debemos colocar el valor 0x010 y escribir en el bus de datos un 0x0000000004. 
-Note que en los ejemplos anteriores, al ejecutar la instrucción ``000003f0: F8C233FC str.w r3, [r2, #0x3fc]`` estamos 
-escribiendo el valor del registro r3 en todos los bits del puerto GPIOF porque el valor 0x3FC en las líneas correspondientes 
+En los ejemplos anteriores, al ejecutar la instrucción ``000003f0: F8C233FC str.w r3, [r2, #0x3fc]`` estamos 
+escribiendo el valor del registro r3 en el puerto GPIOF completo porque el valor 0x3FC en las líneas correspondientes 
 del bus de direcciones habilita cada bit del puerto GPIOF.
 
 A continuación se observa el código generado por el compilador al emplear la estrategia del recurso no compartido:
@@ -296,10 +314,10 @@ A continuación se observa el código generado por el compilador al emplear la e
     000003d8:   621A                str        r2, [r3, #0x20]
 
 La instrucción ``ldr r3, [pc, #0x38]`` carga la dirección del puerto GPIOF en el registro 3 (0x4005D000), ``movs r2, #8`` 
-carga un 8 en en r2 y finalmente ``str r2, [r3, #0x20]`` escribe un 8 en la dirección 0x4005D000 + 0x20, es decir,  
-se escribe un 1 en el bit 3 (no olvide que se numeran desde 0) del puerto GPIOF correspondiente al LED verde.
+carga un 8 en r2 y finalmente ``str r2, [r3, #0x20]`` escribe un 8 en la dirección 0x4005D000 + 0x20, es decir,  
+se escribe un 1 en el bit 3 del puerto GPIOF correspondiente al LED verde.
 
-El siguiente código muestra cómo está declarado el puerto GPIOF en lenguaje C:
+El siguiente código muestra la declaración del puerto GPIOF en lenguaje C:
 
 .. code-block:: c
    :lineno-start: 1
@@ -336,21 +354,7 @@ El siguiente código muestra cómo está declarado el puerto GPIOF en lenguaje C
     #define GPIOF_AHB                       ((GPIOA_Type              *) GPIOF_AHB_BASE)
 
 Más adelante veremos que existe una tercera técnica para controlar el acceso atómico o exclusivo a los recursos compartidos. 
-Dicha opción es ofrecida por un RTOS mediante semáfaros de exclusión mutua o *mutex*. Por lo pronto retomemos la 
-discusión sobre la arquitectura de múltiples *backgrounds* que ofrece un RTOS. Pregunta Juanito: ¿Cómo es posible esta magia?
-
-Retomemos el funcionamiento de una arquitectura *background/foreground* como ilustra la figura:
-
-.. image:: ../_static/fore-back-gound.jpeg
-   :scale: 50 %
-
-El código que enciende y apaga el LED corre en el *background*. Cuando ocurre la interrupción ``SysTick_Handler`` el 
-*background* será "despojado" de la CPU de la cual se apropiará (*preemption*) el servicio de atención a 
-la interrupción o ``ISR`` en el *foreground*. Una vez termine la ejecución de la ISR, el *backgound* retomará justo en el 
-punto en el cual fue "desalojado" (preempted). Note también que la comunicación entre el *background/foreground* se realiza 
-por medio de la variable ``l_tickCtr``. Adicionalmente, observe como la función BSP_tickCtr accede la variable. 
-Pregunta el profe a Juanito: ¿Por qué se hace de esa manera?
-
+Dicha opción es ofrecida por un RTOS mediante el uso semáfaros de exclusión mutua.
 
 
 .. note::
