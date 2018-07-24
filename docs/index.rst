@@ -54,6 +54,8 @@ Este curso es de 3 créditos repartidos en 4 horas de trabajo en el aula y 5 hor
    :caption: Contenidos semanales:
 
    Semana1 <_semana1/semana1>
+   Semana2 <_semana2/semana2>
+   Semana3 <_semana3/semana3>
 
 
 
