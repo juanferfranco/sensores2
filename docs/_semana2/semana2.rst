@@ -356,8 +356,261 @@ El siguiente código muestra la declaración del puerto GPIOF en lenguaje C:
 Más adelante veremos que existe una tercera técnica para controlar el acceso atómico o exclusivo a los recursos compartidos. 
 Dicha opción es ofrecida por un RTOS mediante el uso semáfaros de exclusión mutua.
 
+Ejecución de múltiples *backgound* concurrentes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Hasta este punto hemos ilustrado dos tipos de arquitecturas *backgroud/foreground*: bloqueante (espera ocupada) y no 
+bloqueante (máquinas de estado). En este punto vamos a concentrarnos en evulucionar la versión bloqueante. Para ello, 
+"intentaremos" crear un programa, bloqueante, que encienda y apague dos LEDs de manera independiente y concurrente. El 
+siguiente código ilustra una intento de conseguir lo anterior:
+
+.. code-block:: c 
+   :lineno-start: 1
+
+    #include <stdint.h>
+    #include "bsp.h"
+
+    int main() {
+        volatile uint32_t run = 0U; 
+        BSP_init();
+
+    while (1) {
+        BSP_ledGreenOn();
+        BSP_delay(BSP_TICKS_PER_SEC / 4U);
+        BSP_ledGreenOff();
+        BSP_delay(BSP_TICKS_PER_SEC * 3U / 4U);
+
+        BSP_ledBlueOn();
+        BSP_delay(BSP_TICKS_PER_SEC / 2U);
+        BSP_ledBlueOff();
+        BSP_delay(BSP_TICKS_PER_SEC / 3U);
+
+    }
+        //return 0;
+    }
+
+Al ejecutar este código claramente se observa que los LEDs no están funcionando de manera concurrente e independiente. Por 
+tanto, el siguiente evento sería tener dos ciclos:
+
+.. code-block:: c 
+   :lineno-start: 1
+
+    void main_blinky1() {
+        while (1) {
+            BSP_ledGreenOn();
+            BSP_delay(BSP_TICKS_PER_SEC / 4U);
+            BSP_ledGreenOff();
+            BSP_delay(BSP_TICKS_PER_SEC * 3U / 4U);
+        }
+    }
+
+    void main_blinky2() {
+        while (1) {
+            BSP_ledBlueOn();
+            BSP_delay(BSP_TICKS_PER_SEC / 2U);
+            BSP_ledBlueOff();
+            BSP_delay(BSP_TICKS_PER_SEC / 3U);
+        }
+    }
+
+
+    int main() {
+        volatile uint32_t run = 0U; 
+        BSP_init();
+
+        if(run){
+            main_blinky1();
+        }
+        else{
+        main_blinky2();
+        }
+
+        //return 0;
+    }
+
+Al ejecutar este código claramente se observa que sólo se ejecuta la función ``main_blinky2``. Vamos a analizar en detalle 
+cómo es el funcionamiento de este programa. Para ello vamos a detener la ejecución del programa justo antes de retornar de 
+la interrupción ``SysTick_Handler```. La figura muestra el contenido del los registros del procesador, el *stack frame* y 
+el contenido del *stack*.
+
+.. image:: ../_static/intStack.jpeg
+
+Según el *stack frame* y el contenido del *stack*, al retornar de la interrupción el programa debe continuar en la posición 
+de memoria ``PC = 0x000004EC``. De manera muy astuta pregunta Juanito: ¿Y si cambiamos a mano el valor en el stack 
+que será cargado en el PC al retornar de la interrupción? Esto permitiría hacer que el programa continue en cualquier 
+posición de memoria. La siguiente figura muestra la posición en memoria de programa de la función main_blinky1:
+
+.. image:: ../_static/main_blinky1-code.jpeg
+   :scale: 80 %
+
+El inicio de la función está en la posición 0x000007C6. Por tanto, si modificamos la posición del stack correspondiente al 
+PC justo antes de retornar de la interrupción, conseguiremos el efecto deseado. La siguiente figura muestra lo conseguido 
+hasta ahora modificando de manera manual la dirección de retorno de la interrupción.
+
+.. image:: ../_static/ISR-switch.jpeg
+
+La técnica anterior es el principio sobre el cual se basan los RTOS para lograr cambiar el flujo de ejecución entre 
+los diferentes *backgrounds* disponibles. La parte del RTOS encargada de extender la arquitectura *backgound/foreground* 
+permiendo que se puedan ejecutar concurrentemente varios *backgounds* sobre la misma CPU se denomina ``kernel``. A estos 
+múltiples *backgrounds* los denominamos ``tareas``. Al proceso de cambiar frecuentemente la CPU entre mútiples tareas 
+creando la ilusión de que cada tarea tiene la CPU para ella sóla se denomina ``multitarea``.
+
+Como se señaló anteriormente, el cambio en la dirección de retorno de la interrupción es el principio de un kernel, pero  
+esta idea por si sola presenta un problema. Si ``main_blinky1`` se está ejecutando y ocurre una interrupción, la CPU 
+salvará automáticamente los registros ``R0 a R3`` y ``LR, PC y xPSR`` en el stack. Luego al retornar de la interrupción, 
+los registros serán restuardos. De esta manera la interrupción podrá hacer uso de los registros y 
+la función ``main_blinky1`` podrá continuar en el punto donde fue interrumpida. Si en vez de volver a ``main_blinky1`` el 
+flujo continua con ``main_blinky2`` los registros resturados serán modificados por el código de ``main_blinky2`` y al 
+retornar a ``main_blinky1`` el estado de los registros estará corrupto. La siguiente figura ilustra el problema:
+
+.. image:: ../_static/RegsUnsave.jpeg
+
+Por tanto, es necesario tener un espacio para salvar el contenido de los registros de main_blinky1, así como para 
+main_blinky2. Si cada tarea tiene un stack propio, se puede conseguir lo que muestra la figura:
+
+.. image:: ../_static/stack-privado.jpeg
+
+El siguiente código muestra una posible implementación para lo descrito anteriormente:
+
+.. code-block:: c 
+   :lineno-start: 1
+
+    #include <stdint.h>
+    #include "bsp.h"
+
+    #include <stdint.h>
+    #include "bsp.h"
+
+    uint32_t stack_blinky1[40];
+    uint32_t *sp_blinky1 = &stack_blinky1[40];
+
+    void main_blinky1() {
+        while (1) {
+            BSP_ledGreenOn();
+            BSP_delay(BSP_TICKS_PER_SEC / 4U);
+            BSP_ledGreenOff();
+            BSP_delay(BSP_TICKS_PER_SEC * 3U / 4U);
+        }
+    }
+
+    uint32_t stack_blinky2[40];
+    uint32_t *sp_blinky2 = &stack_blinky2[40];
+
+    void main_blinky2() {
+        while (1) {
+            BSP_ledBlueOn();
+            BSP_delay(BSP_TICKS_PER_SEC / 2U);
+            BSP_ledBlueOff();
+            BSP_delay(BSP_TICKS_PER_SEC / 3U);
+        }
+    }
+
+
+    /* background code: sequential with blocking version */
+    int main() {
+        BSP_init();
+
+    /* fabricate Cortex-M ISR stack frame for blinky1 */
+    *(--sp_blinky1) = (1U << 24);  /* xPSR */
+    *(--sp_blinky1) = (uint32_t)&main_blinky1; /* PC */
+    *(--sp_blinky1) = 0x0000000EU; /* LR  */
+    *(--sp_blinky1) = 0x0000000CU; /* R12 */
+    *(--sp_blinky1) = 0x00000003U; /* R3  */
+    *(--sp_blinky1) = 0x00000002U; /* R2  */
+    *(--sp_blinky1) = 0x00000001U; /* R1  */
+    *(--sp_blinky1) = 0x00000000U; /* R0  */
+    /* additionally, fake registers R4-R11 */
+    *(--sp_blinky1) = 0x0000000BU; /* R11 */
+    *(--sp_blinky1) = 0x0000000AU; /* R10 */
+    *(--sp_blinky1) = 0x00000009U; /* R9 */
+    *(--sp_blinky1) = 0x00000008U; /* R8 */
+    *(--sp_blinky1) = 0x00000007U; /* R7 */
+    *(--sp_blinky1) = 0x00000006U; /* R6 */
+    *(--sp_blinky1) = 0x00000005U; /* R5 */
+    *(--sp_blinky1) = 0x00000004U; /* R4 */
+
+    /* fabricate Cortex-M ISR stack frame for blinky2 */
+    *(--sp_blinky2) = (1U << 24);  /* xPSR */
+    *(--sp_blinky2) = (uint32_t)&main_blinky2; /* PC */
+    *(--sp_blinky2) = 0x0000000EU; /* LR  */
+    *(--sp_blinky2) = 0x0000000CU; /* R12 */
+    *(--sp_blinky2) = 0x00000003U; /* R3  */
+    *(--sp_blinky2) = 0x00000002U; /* R2  */
+    *(--sp_blinky2) = 0x00000001U; /* R1  */
+    *(--sp_blinky2) = 0x00000000U; /* R0  */
+    /* additionally, fake registers R4-R11 */
+    *(--sp_blinky2) = 0x0000000BU; /* R11 */
+    *(--sp_blinky2) = 0x0000000AU; /* R10 */
+    *(--sp_blinky2) = 0x00000009U; /* R9 */
+    *(--sp_blinky2) = 0x00000008U; /* R8 */
+    *(--sp_blinky2) = 0x00000007U; /* R7 */
+    *(--sp_blinky2) = 0x00000006U; /* R6 */
+    *(--sp_blinky2) = 0x00000005U; /* R5 */
+    *(--sp_blinky2) = 0x00000004U; /* R4 */
+
+        while (1) {
+        }
+        //return 0;
+    }
+
+Analicemos varios asuntos del código anterior. La línea ``uint32_t stack_blinky1[40];`` declara el *stack* para la tarea1. 
+la línea ``uint32_t *sp_blinky1 = &stack_blinky1[40];`` inicializa el *stack pointer* para la tarea1. El *stack* es de 40 
+palabras de 32 bits y si inicializa en la palabra 41, es decir, una palabra por fuera del *stack*. La siguiente figura 
+ilustra el funcionamiento del *stack* para el microcontrolandor en cuestión e ilustra la razón para inicializar el 
+*stack pointer* de esta manera ya que al hacer una operación ``push`` primero se decrementa el *stack pointer* y luego 
+se almacena el dato en el *stack*.
+
+.. image:: ../_static/msp432_stack.jpeg
+   :scale: 70 %
+
+Las siguientes líneas de código sirven para inicializar el stack de cada tarea. Note que se guardarán los registros 
+de la CPU ``xPSR,PC,LR,R0-R3, R12``:
+
+.. code-block:: c 
+   :lineno-start: 37
+
+    /* fabricate Cortex-M ISR stack frame for blinky1 */
+    *(--sp_blinky1) = (1U << 24);  /* xPSR */
+    *(--sp_blinky1) = (uint32_t)&main_blinky1; /* PC */
+    *(--sp_blinky1) = 0x0000000EU; /* LR  */
+    *(--sp_blinky1) = 0x0000000CU; /* R12 */
+    *(--sp_blinky1) = 0x00000003U; /* R3  */
+    *(--sp_blinky1) = 0x00000002U; /* R2  */
+    *(--sp_blinky1) = 0x00000001U; /* R1  */
+    *(--sp_blinky1) = 0x00000000U; /* R0  */
+    /* additionally, fake registers R4-R11 */
+    *(--sp_blinky1) = 0x0000000BU; /* R11 */
+    *(--sp_blinky1) = 0x0000000AU; /* R10 */
+    *(--sp_blinky1) = 0x00000009U; /* R9 */
+    *(--sp_blinky1) = 0x00000008U; /* R8 */
+    *(--sp_blinky1) = 0x00000007U; /* R7 */
+    *(--sp_blinky1) = 0x00000006U; /* R6 */
+    *(--sp_blinky1) = 0x00000005U; /* R5 */
+    *(--sp_blinky1) = 0x00000004U; /* R4 */
+
+Inicialmente ninguna de las tareas funcionará porque el programa se quedará infinitamente en el ciclo 
+``while (1) { }``. Para comenzar la ejecución de las tareas, debemos detener el programa justo antes de retornar de 
+``SysTick_Handler``. Restaruramos los registros ``R4-R11`` (inicialmente con basura porque es la primera vez 
+que ejecutamos la tarea1). Ajustamos el *stack pointer* de la tarea 1 para que apunte a R0 y asignamos el SP de la CPU 
+con el valor del *stack pointer* de la tarea1. Una vez se reanuda el programa se debe ejecutar la tarea1. 
+Para ejecutar la tarea2, volvemos a detener el programa, pero esta vez al inicio de la interrupción ``SysTick_Handler``. 
+En este punto, tendremos salvados en el *stack* de la tarea1 los registros ``xPSR,PC,LR,R0-R3, R12`` 
+(estos los salva la interrupción automáticamente). Ahora debemos salvar en el *stack* de la tarea1 el resto de registros 
+de la CPU, es decir, ``R4-R11`` (comenzando por R11) y ajustar el valor del *stack pointer* de la tarea1 al último 
+registro salvado. Justo antes de retornar de la interrupción debemos restaurar los registros ``R4-R11`` de la tarea2 
+(la primera vez con basura, luego si tendrá los valores apropiados), colocamos el *stack pointer* de la tarea2 apuntando a 
+R0 y asignamos el SP de la CPU con el valor del *stack pointer* de la tarea2. Al retornar de ``SysTick_Handler`` se 
+ejecutará la tarea2. Este proceso se repetirá indefinidamente. Claramente se observa que este procedimiento manual es 
+tedioso, pero como ya se mencionó se puede automatizar completamente por software. Ese es el trabajo del kernel del RTOS.
+
+Ejercicio
+----------
+Escriba cómo sería el algoritmo para implementar el kernel que funcione como previamente se describió. Pregunta Juanito: 
+¿Es posible implementar el algoritmo utilizando 100 % código C? ¿Será necesario escribir algo de código ensamblador?
+
 
 .. note::
-    Los ejemplos anterior son tomados de un excelente curso ofrecido por `Miro Samek <http://www.state-machine.com/quickstart/>`__.
+    Los ejemplos anterior y algunas figuras son tomados de un excelente curso ofrecido por 
+    `Miro Samek <http://www.state-machine.com/quickstart/>`__.
 
 
