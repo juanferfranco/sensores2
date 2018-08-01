@@ -161,13 +161,13 @@ En este ejercicio vamos a crear un par de tareas:
         /* Create one of the two tasks. */
         xTaskCreate(	vTask1,		/* Pointer to the function that implements the task. */
                         "Task 1",	/* Text name for the task.  This is to facilitate debugging only. */
-                        1000,		/* Stack depth - most small microcontrollers will use much less stack than this. */
+                        2048,		/* Stack depth - most small microcontrollers will use much less stack than this. */
                         NULL,		/* We are not using the task parameter. */
                         1,			/* This task will run at priority 1. */
                         NULL );		/* We are not using the task handle. */
 
         /* Create the other task in exactly the same way. */
-        xTaskCreate( vTask2, "Task 2", 1000, NULL, 1, NULL ); 
+        xTaskCreate( vTask2, "Task 2", 2048, NULL, 1, NULL ); 
     }
 
 Los parámetros de ``xTaskCreate`` están detalladamente explicados `aquí <https://esp-idf.readthedocs.io/en/latest/api-reference/system/freertos.html#task-api>`__. 
@@ -196,11 +196,196 @@ la aplicación listas para correr porque están bloqueadas esperando por algún 
 están haciendo uso de las CPUs todos el tiempo en espera ocupada. Por tanto, la *Task watchdog* alertará al desarrollador 
 acerca de este uso excesivo de la CPU.
 
-Pregunta Juanito: ¿Es posible deshabilitar temporalmente *Task watchdog*? Si, es necesario hacer un ``menuconfig`` e 
+Pregunta Juanito: ¿Es posible deshabilitar temporalmente *Task watchdog*? Sí, es necesario hacer un ``menuconfig`` e 
 ingresar al componente ESP32-specific donde se podrá dehabilitar la opción ``Initialize Task Watchdog Timer on stratup``. 
 Realice este procedimiento y verifique de nuevo la salida del programa.
 
+Ejercicio 4: uso de los parámetros de una tarea
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+En este ejercicios veremos que es posible crear tareas completamente independientes aunque utilicemos el mismo código. Es 
+algo similar a definir una clase y luego instanciar dos objetos. Para este ejercicio podemos copiar el directorio del ejercicio 
+anterior y hacemos lo siguiente:
 
+    * Borrar el directorio build.
+    * Borrar los archivos sdkconfig.
+    * En .vscode dejar sólo los archivos c_cpp_properties.json y tasks.json.
+    * Abrir el el directorio.
+    * Cambiar el nombre del archivo .c por example2.c
+    * En el archivo MakeFile cambiar el nombre del proyecto. Por ejemplo, FreeRTOS-exmaple2.
+    * Abrir el archivo c_cpp_properties.json y verificar que la parte final del archivo se vea así (de lo contrario borrar)::
 
+                            "D:/ESP32/msys32/opt/xtensa-esp32-elf/lib/gcc/xtensa-esp32-elf/5.2.0/include",
+                            "D:/ESP32/msys32/opt/xtensa-esp32-elf/lib/gcc/xtensa-esp32-elf/5.2.0/include-fixed"
+                        ],
+                        "limitSymbolsToIncludedHeaders": true,
+                        "databaseFilename": "${workspaceRoot}/.vscode/browse.vc.db"
+                    },
+                    "cStandard": "c11",
+                    "cppStandard": "c++17"
+                }
+            ],
+            "version": 4
+        }
+    * Hacer un menuconfig, cambiando el puerto serial, la velocidad y en ``Component config``, ``ESP32-specific``, modificar 
+      ``Panic Handler behaviour`` por ``Print registers and halt``. De esta manera si tenemos un error podremos leer 
+      fácilmente la razón del error y las CPUs será detenidas.
 
+Ejecutar el siguiente código:
+
+.. code-block:: c
+   :lineno-start: 1
+
+    #include <stdio.h>
+    #include "freertos/FreeRTOS.h"
+    #include "freertos/task.h"
+
+    /* Used as a loop counter to create a very crude delay. */
+    #define mainDELAY_LOOP_COUNT		( 0xffffff)
+
+    /* Define the strings that will be passed in as the task parameters.  These are
+    defined const and off the stack to ensure they remain valid when the tasks are
+    executing. */
+    const char *pcTextForTask1 = "Task 1 is running\n";
+    const char *pcTextForTask2 = "Task 2 is running\n";
+
+    TaskHandle_t xTask1Handle;
+    TaskHandle_t xTask2Handle;
+
+    /* The task function. */
+    void vTaskFunction( void *pvParameters )
+    {
+        char *pcTaskName;
+        volatile uint32_t ul;
+
+        /* The string to print out is passed in via the parameter.  Cast this to a
+        character pointer. */
+        pcTaskName = (char *)pvParameters;
+
+        /* As per most tasks, this task is implemented in an infinite loop. */
+        for( ;; )
+        {
+            /* Print out the name of this task. */
+            printf( pcTaskName );
+            printf("stack: %d \n",uxTaskGetStackHighWaterMark(NULL));
+ 
+            /* Delay for a period. */	
+            for( ul = 0; ul < mainDELAY_LOOP_COUNT; ul++ )
+            {
+
+            }
+        }
+    }
+    /*-----------------------------------------------------------*/
+    void app_main()
+    {
+        /* Create one of the two tasks. */
+        xTaskCreate(	vTaskFunction,		/* Pointer to the function that implements the task. */
+                        "Task 1",	/* Text name for the task.  This is to facilitate debugging only. */
+                        1000,		/* Stack depth - most small microcontrollers will use much less stack than this. */
+                        (void *) pcTextForTask1,  /* Pass the text to be printed into the task using the task parameter. */
+                        1,			/* This task will run at priority 1. */
+                        &xTask1Handle );		/* We are not using the task handle. */
+
+        /* Create the other task in exactly the same way. */
+        xTaskCreate( vTaskFunction, "Task 2", 1000, (void *) pcTextForTask2, 1, &xTask2Handle ); 
+    }
+
+Al ejecutar la aplicación anterior y abrir el puerto serial no veremos mensajes impresos en la terminal. Si presionamos 
+el botón de reset veremos que se ha presentado una condición de error en el programa y las CPUs se han detenido.
+
+Ahora cambie el tamaño del stack de 1000 a 1500. ¿El mensaje de error es el mismo? Los dos errores anteriores son indicio 
+de problemas en la definición del tamaño del stack de cada tarea. Por último, vamos a incrementar el tamaño del stack a 
+2048 en cada tarea. ¿Qué resultado se consigue?
+
+Ejercicio 5: manejo de prioridades
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FreeRTOS planifica las tareas (*schedule*) por prioridades. La política es que la CPU será entregada 
+a la tarea lista para correr con la prioridad más alta. Cuando las tareas tienen la misma prioridad, la CPU es entregada por 
+turnos (*round-robin*). A cada tarea se le asignará el mismo ``time slicing`` que será el intervalo entre ``ticks``. Si 
+configTICK_RATE_HZ es 100 Hz cada tarea tendrá la CPU por 10 ms. Tenga presente que las prioridades se asignan 
+entre 0 y (configMAX_PRIORITIES  –  1). El macro configMAX_PRIORITIES está definido en el archivo FreeRTOSConfig.h.   
+
+.. code-block:: c
+   :lineno-start: 1
+
+    #include <stdio.h>
+    #include "freertos/FreeRTOS.h"
+    #include "freertos/task.h"
+
+    /* Used as a loop counter to create a very crude delay. */
+    #define mainDELAY_LOOP_COUNT		( 0xffffff)
+
+    /* Define the strings that will be passed in as the task parameters.  These are
+    defined const and off the stack to ensure they remain valid when the tasks are
+    executing. */
+    const char *pcTextForTask1 = "Task 1 is running\n";
+    const char *pcTextForTask2 = "Task 2 is running\n";
+    const char *pcTextForTask3 = "Task 3 is running\n";
+
+    /* The task function. */
+    void vTaskFunction( void *pvParameters )
+    {
+        char *pcTaskName;
+        volatile uint32_t ul;
+
+        /* The string to print out is passed in via the parameter.  Cast this to a
+        character pointer. */
+        pcTaskName = (char *)pvParameters;
+
+        /* As per most tasks, this task is implemented in an infinite loop. */
+        for( ;; )
+        {
+            /* Print out the name of this task. */
+            printf( pcTaskName );
+            printf("stack: %d \n",uxTaskGetStackHighWaterMark(NULL));
+            /* Delay for a period. */	
+            for( ul = 0; ul < mainDELAY_LOOP_COUNT; ul++ )
+            {
+            }
+        }
+    }
+    /*-----------------------------------------------------------*/
+    void app_main()
+    {
+        /* Create one of the two tasks. */
+        xTaskCreate(	vTaskFunction,		/* Pointer to the function that implements the task. */
+                        "Task 1",	/* Text name for the task.  This is to facilitate debugging only. */
+                        2048,		/* Stack depth - most small microcontrollers will use much less stack than this. */
+                        (void *) pcTextForTask1,  /* Pass the text to be printed into the task using the task parameter. */
+                        1,			/* This task will run at priority 1. */
+                        NULL );		/* We are not using the task handle. */
+
+        /* Create the other task in exactly the same way. */
+        xTaskCreate( vTaskFunction, "Task 2", 2048, (void *) pcTextForTask2, 2, NULL);
+        xTaskCreate( vTaskFunction, "Task 3", 2048, (void *) pcTextForTask3, 3, NULL ); 
+    }
+
+El resultado de ejecutar el código será::
+    Task 2 is running
+    stack: 512 
+    Task 3 is running
+    stack: 324 
+    Task 2 is running
+    stack: 512 
+    Task 3 is running
+    stack: 324 
+    Task 2 is running
+    stack: 512 
+
+Pregunta Juanito: ¿Y en dónde está la tarea 1? Como la tarea 1 tiene prioridad 1, el planificador del sistema operativo 
+(``scheduler``) asignará las CPUs a las tareas 2 y 3 que tienen la prioridad más alta (2 y 3 respectivamente) y siempre 
+están listas para correr.
+
+Pregunta Juanito: ¿Y cómo hacemos para que la tarea 1 pueda correr sin cambiar las prioridades? Debemos hacer que las tareas 
+de más alta prioridad pasen del estado listas para correr a bloqueadas. Esto lo puede lograr un tarea llamando funciones 
+especiales del sistema operativo que las obliguen a esperar por algún evento. Cuando un tarea espera por algún evento, el 
+sistema operativo no lo tendrá en cuenta para la planificación de la CPU. Por tanto, la colocará en una lista de tareas 
+bloqueadas (esperando por).
+
+la siguiente figura muestra los posibles estados de una tarea en FreeRTOS:
+
+.. image:: ../_static/taskStates.jpeg
+
+Ejercicio 6: llamados bloqueantes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
