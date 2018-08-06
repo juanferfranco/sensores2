@@ -5,6 +5,7 @@ opertativo de tiempo real sobre la plataforma ESP32.
 
 Objetivos
 ----------
+
 1. Conocer las características básicas de un sistema operativo de tiempo real.
 2. Utilizar tareas para construir programas.
 3. Utilizar mecanismos de comunicación entre tareas.
@@ -15,7 +16,7 @@ Ejercicios con el API de FreeRTOS
 Para realizar los siguientes ejercicio es necesario tener a la mano dos documentos:
 
 1. `Tutorial oficial <https://www.freertos.org/Documentation/161204_Mastering_the_FreeRTOS_Real_Time_Kernel-A_Hands-On_Tutorial_Guide.pdf>`__.
-2. La implementación de Espressif. `ESP-FREETOS <https://esp-idf.readthedocs.io/en/latest/api-reference/system/freertos.html>`__.
+2. La implementación de Espressif. `ESP-FREERTOS <https://esp-idf.readthedocs.io/en/latest/api-reference/system/freertos.html>`__.
 
 
 Ejericio 1: explorar documentación y código fuente
@@ -26,8 +27,9 @@ la información cuando haga falta:
 
 1. Espressif, la empresa detrás de la plataforma ESP32, ha realizado un excelente trabajo de apatación del FreeRTOS al ESP32. 
    En los siguientes enlaces se pueden consultar los detalles: 
+
    * API de FreeRTOS: `FreeRTOS <https://esp-idf.readthedocs.io/en/latest/api-reference/system/freertos.html>`__.
-   * FreeRTOS específico para el *framework* ESP-IDF: `FREETOS-SMP <http://esp-idf.readthedocs.io/en/latest/api-guides/freertos-smp.html>`__.
+   * FreeRTOS específico para el *framework* ESP-IDF: `FREERTOS-SMP <http://esp-idf.readthedocs.io/en/latest/api-guides/freertos-smp.html>`__.
 
 2. Abra cada una de las secciones del `sitio con la documentación <https://esp-idf.readthedocs.io/en/latest/>`__ oficial del ESP32 y *mire por encima*.
 
@@ -361,6 +363,7 @@ entre 0 y (configMAX_PRIORITIES  –  1). El macro configMAX_PRIORITIES está de
     }
 
 El resultado de ejecutar el código será::
+
     Task 2 is running
     stack: 512 
     Task 3 is running
@@ -388,4 +391,149 @@ la siguiente figura muestra los posibles estados de una tarea en FreeRTOS:
 
 Ejercicio 6: llamados bloqueantes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+El siguiente código muestra cómo podemos modificar el ejemplo anterior, usando llamados bloqueantes, para lograr que las 
+tareas de mayor prioridad pasen al estado bloqueado:
+
+.. code-block:: c 
+   :lineno-start: 1
+
+    #include <stdio.h>
+    #include "freertos/FreeRTOS.h"
+    #include "freertos/task.h"
+
+    /* Used as a loop counter to create a very crude delay. */
+    #define mainDELAY_LOOP_COUNT		( 0xffffff)
+
+    /* Define the strings that will be passed in as the task parameters.  These are
+    defined const and off the stack to ensure they remain valid when the tasks are
+    executing. */
+    const char *pcTextForTask1 = "Task 1 is running\n";
+    const char *pcTextForTask2 = "Task 2 is running\n";
+    const char *pcTextForTask3 = "Task 3 is running\n";
+
+    /* The task function. */
+    void vTaskFunction( void *pvParameters )
+    {
+        char *pcTaskName;
+
+        /* The string to print out is passed in via the parameter.  Cast this to a
+        character pointer. */
+        pcTaskName = (char *)pvParameters;
+
+        /* As per most tasks, this task is implemented in an infinite loop. */
+        for( ;; )
+        {
+            /* Print out the name of this task. */
+            printf( pcTaskName );
+            printf("stack: %d \n",uxTaskGetStackHighWaterMark(NULL));
+            /* Delay for a period.  This time a call to vTaskDelay() is used which places 
+            the task into the Blocked state until the delay period has expired.  The  
+            parameter takes a time specified in ‘ticks’, and the pdMS_TO_TICKS() macro  
+            is used to convert 250 milliseconds into an equivalent time in ticks. */ 
+            vTaskDelay(pdMS_TO_TICKS( 1000 ));
+        }
+    }
+    /*-----------------------------------------------------------*/
+    void app_main()
+    {
+        /* Create one of the two tasks. */
+        xTaskCreate(	vTaskFunction,		/* Pointer to the function that implements the task. */
+                        "Task 1",	/* Text name for the task.  This is to facilitate debugging only. */
+                        2048,		/* Stack depth - most small microcontrollers will use much less stack than this. */
+                        (void *) pcTextForTask1,  /* Pass the text to be printed into the task using the task parameter. */
+                        1,			/* This task will run at priority 1. */
+                        NULL );		/* We are not using the task handle. */
+
+        /* Create the other task in exactly the same way. */
+        xTaskCreate( vTaskFunction, "Task 2", 2048, (void *) pcTextForTask2, 2, NULL);
+        xTaskCreate( vTaskFunction, "Task 3", 2048, (void *) pcTextForTask3, 3, NULL ); 
+    }
+
+
+El resultado será::
+
+    Task 1 is running
+    stack: 600 
+    Task 3 is running
+    stack: 592 
+    Task 2 is running
+    stack: 532 
+    Task 1 is running
+    stack: 600 
+    Task 3 is running
+    stack: 592 
+    Task 2 is running
+    stack: 532 
+
+Note que en este caso la tarea 1 será ejecutada. Otro llamado bloqueante que genera resultados similares es 
+vTaskDelayUntil(). A diferencia de vTaskDelay, vTaskDelayUntil espcifica exactamente el valor del contador de *ticks* 
+en el cual la tarea debe moverse del estado bloqueado al estado listo para correr. En cambio vTaskDelay especifica la 
+cantidad de *ticks* que debe pasar la tarea bloqueada desde el momento en que se realiza el llamado a la función. Por tanto, 
+si antes de llamar a vTaskDelay el código previo no es el mismo, la tarea se ejecutará con algo de *jitter* porque el 
+tiempo relativo entre llamados a la función vTaskDelay presentará variabilidad (*jitter*).
+
+.. code-block:: c 
+   :lineno-start: 1
+
+    #include <stdio.h>
+    #include "freertos/FreeRTOS.h"
+    #include "freertos/task.h"
+
+    /* Used as a loop counter to create a very crude delay. */
+    #define mainDELAY_LOOP_COUNT		( 0xffffff)
+
+    /* Define the strings that will be passed in as the task parameters.  These are
+    defined const and off the stack to ensure they remain valid when the tasks are
+    executing. */
+    const char *pcTextForTask1 = "Task 1 is running\n";
+    const char *pcTextForTask2 = "Task 2 is running\n";
+    const char *pcTextForTask3 = "Task 3 is running\n";
+
+    /* The task function. */
+    void vTaskFunction( void *pvParameters )
+    {
+        char *pcTaskName;
+        TickType_t xLastWakeTime; 
+
+        /* The string to print out is passed in via the parameter.  Cast this to a
+        character pointer. */
+        pcTaskName = (char *)pvParameters;
+
+        /* The xLastWakeTime variable needs to be initialized with the current tick 
+        count.  Note that this is the only time the variable is written to explicitly. 
+        After this xLastWakeTime is automatically updated within vTaskDelayUntil(). */ 
+        xLastWakeTime = xTaskGetTickCount();
+
+        /* As per most tasks, this task is implemented in an infinite loop. */
+        for( ;; )
+        {
+            /* Print out the name of this task. */
+            printf( pcTaskName );
+            printf("stack: %d \n",uxTaskGetStackHighWaterMark(NULL));
+            /* This task should execute every 1000 milliseconds exactly.  As per 
+            the vTaskDelay() function, time is measured in ticks, and the 
+            pdMS_TO_TICKS() macro is used to convert milliseconds into ticks. 
+            xLastWakeTime is automatically updated within vTaskDelayUntil(), so is not 
+            explicitly updated by the task. */ 
+            vTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS( 1000 ));  
+        }
+    }
+    /*-----------------------------------------------------------*/
+    void app_main()
+    {
+        /* Create one of the two tasks. */
+        xTaskCreate(	vTaskFunction,		/* Pointer to the function that implements the task. */
+                        "Task 1",	/* Text name for the task.  This is to facilitate debugging only. */
+                        2048,		/* Stack depth - most small microcontrollers will use much less stack than this. */
+                        (void *) pcTextForTask1,  /* Pass the text to be printed into the task using the task parameter. */
+                        1,			/* This task will run at priority 1. */
+                        NULL );		/* We are not using the task handle. */
+
+        /* Create the other task in exactly the same way. */
+        xTaskCreate( vTaskFunction, "Task 2", 2048, (void *) pcTextForTask2, 2, NULL);
+        xTaskCreate( vTaskFunction, "Task 3", 2048, (void *) pcTextForTask3, 3, NULL ); 
+    }
+
+El resultado debe ser el mismo del código anterior.
+
 
