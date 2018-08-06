@@ -8,8 +8,6 @@ Objetivos
 
 1. Conocer las características básicas de un sistema operativo de tiempo real.
 2. Utilizar tareas para construir programas.
-3. Utilizar mecanismos de comunicación entre tareas.
-4. Emplear los servicios ofrecidos por los temporizadores del sistema operativo para controlar acciones en el tiempo.
 
 Ejercicios con el API de FreeRTOS
 ---------------------------------
