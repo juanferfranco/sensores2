@@ -11,7 +11,7 @@ Material de referencia para el reto
 En base a este `ejemplo <https://github.com/sinelabore/examples/tree/master/EnergiaBlink>`__ (tomado del proyecto 
 SinelaboreRT), vamos a ilustrar la implementación, mediante un objeto activo, de la tarea que controla el LED:
 
-.. image:: ../_static/SM.png
+.. image:: ../_static/SM.jpeg
 
 .. code-block:: c
    :lineno-start: 1
@@ -142,7 +142,7 @@ SinelaboreRT), vamos a ilustrar la implementación, mediante un objeto activo, d
                     printf("aoTimer started\r\n");
                 }
             }
-            gpio_set_level(GPIO_OUTPUT_IO_0, pdFALSE);
+            gpio_set_level(GPIO_OUTPUT_IO_0, pdTRUE);
             printf("LED OFF \r\n");
             // Copy state variables back
             stateVars = stateVarsCopy;
