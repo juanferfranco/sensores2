@@ -26,6 +26,8 @@ SinelaboreRT), vamos a ilustrar la implementación, mediante un objeto activo, d
     #include "freertos/queue.h"
     #include "freertos/timers.h"
 
+    static const int RX_BUF_SIZE = 1024;
+
     #define TXD_PIN (GPIO_NUM_4)
     #define RXD_PIN (GPIO_NUM_5)
     #define GPIO_OUTPUT_IO_0 GPIO_NUM_18
