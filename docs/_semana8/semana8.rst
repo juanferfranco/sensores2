@@ -3,8 +3,6 @@ Semana 8
 Esta semana continuaremos con el reto de la semana pasada y realizaremos la evaluación sumativa teórica de la primera 
 parte del curso. 
 
-.. _my-reference-label:
-
 Material de referencia para el reto
 -------------------------------------
 

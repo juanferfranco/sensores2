@@ -11,8 +11,6 @@ Objetivos
 1. Comprender el patrón de diseño de Objetos Activos.
 2. Utilizar el patrón de diseño para la construcción de aplicaciones.
 
-.. _my-reference-label:
-
 Patrón de diseño de Objetos Activos
 -------------------------------------
 El material que se presentará a continuación está basado en:
