@@ -64,6 +64,8 @@ Este curso es de 3 créditos repartidos en 4 horas de trabajo en el aula y 5 hor
    Semana9 <_semana9/semana9>
    Semana10 <_semana10/semana10>
    Semana11 <_semana11/semana11>
+   Semana12 <_semana12/semana12>
+   Semana13 <_semana13/semana13>
 
    
 
