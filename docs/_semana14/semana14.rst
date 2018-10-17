@@ -87,3 +87,7 @@ Ejercicio 2:
 -------------
 Utilizando como base el código anterior realice un programa que permita leer el valor de un sensor BME280 y modificar 
 el estado de un LED. El programa correrá en un computador y el sensor y actuador en un ESP32.
+
+Ejercicio 3:
+-------------
+Simule dos sensores y actuadores más, para un total de 3.
