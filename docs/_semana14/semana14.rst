@@ -79,7 +79,9 @@ Analice el funcionamiento del siguiente código escrito en processing:
         someClient.stop();
     }
     }
-¿Qué hace el programa?
+
+¿Qué hace el programa? Corra el programa y conecte clientes utilizando un simulador como
+ `hercules <https://www.hw-group.com/software/hercules-setup-utility>`__.
 
 Ejercicio 2:
 -------------
