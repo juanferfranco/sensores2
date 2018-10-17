@@ -14,19 +14,19 @@ Analice el funcionamiento del siguiente código escrito en processing:
 .. code-block:: java
    :lineno-start: 1
 
-    //import processing.net.*;
-    import netP5.*;
+    import processing.net.*;
+
 
     final int MAXCLIENTS = 2;
 
-    TcpServer myServer;
-    TcpClient myclients[] = new TcpClient[MAXCLIENTS];
+    Server myServer;
+    Client myclients[] = new Client[MAXCLIENTS];
     int numberOfClients = 0;
     int val = 0;
 
     void setup() {
     size(200, 200);
-    myServer = new TcpServer(this, 5204);
+    myServer = new Server(this, 5204);
     }
     
     void draw() {
@@ -34,7 +34,7 @@ Analice el funcionamiento del siguiente código escrito en processing:
     background(val);
 
     for (int i = 0; i<MAXCLIENTS; i++) {
-        TcpClient clientConnected = myclients[i];
+        Client clientConnected = myclients[i];
         if (clientConnected != null) {
         if (clientConnected.active()) {
             if(clientConnected.available()>0){
@@ -79,7 +79,6 @@ Analice el funcionamiento del siguiente código escrito en processing:
         someClient.stop();
     }
     }
-
 ¿Qué hace el programa?
 
 Ejercicio 2:
