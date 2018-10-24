@@ -200,7 +200,7 @@ Los pasos para recibir datos por UDP son:
 * Iniciar el objeto estableciendo un socket compuesto por la dirección IP y el puerto de escucha.
 * Procesar el siguiente paquete UDP con parsePacket(). Esta acción devolverá el tamaño del paquete en bytes.
 * Luego de llamar parsePacket() será posible utilizar los métodos read() y available().
- * Leer el paquete.
+* Leer el paquete.
 
 En el ejemplo mostrado, note que un actuador distribuido responderá al bridge con el carácter '1' cada que reciba un 
 paquete. De esta manera el bridge sabrá que el dato llegó a su destino; sin embargo, tenga presente que esta acción de 
