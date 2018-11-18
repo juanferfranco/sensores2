@@ -15,10 +15,10 @@ Juan Madrigal cuartas:
 Simón Pineda Agudelo:
 
 * Documentación: no envió.
-* Videos: no envió.
+* Video: no envió.
 
 Donaldo Solano Naranjo:
 
 * `Documentación <https://drive.google.com/open?id=1lCMM6boXenB_YcMyub1UgqJcgjk89ODB>`__. Faltó el tutorial. Faltó la 
   explicación del código en processing.
-* `Videos <https://drive.google.com/open?id=1lCMM6boXenB_YcMyub1UgqJcgjk89ODB>`__. Está al final del documento.
+* `Video <https://drive.google.com/open?id=1lCMM6boXenB_YcMyub1UgqJcgjk89ODB>`__. Está al final del documento.
