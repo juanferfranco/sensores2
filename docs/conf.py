@@ -20,13 +20,13 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Sensores 2'
-copyright = '2018, Juan Franco'
+copyright = '2019, Juan Franco'
 author = 'Juan Franco'
 
 # The short X.Y version
-version = '0.0.1'
+version = '1.0.0'
 # The full version, including alpha/beta/rc tags
-release = 'alpha'
+release = 'beta'
 
 
 # -- General configuration ---------------------------------------------------
