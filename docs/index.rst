@@ -42,13 +42,13 @@ Evaluación
 -----------
 La evaluación del curso se dividirá en dos componentes:
 
-* Proyectos: 70% (ver en el cronograma el valor de cada proyecto). Cada proyecto será evaluado en una sesión posterior
+* Proyectos: 80% (ver en el cronograma el valor de cada proyecto). Cada proyecto será evaluado en una sesión posterior
   al proyecto. La evaluación será a libro cerrado. Solo se podrá sacar, impresa, la solución del proyecto.
 
-* Proyecto Final:   30%. El proyecto final tendrá una presentación y unos entregables. El objetivo de este trabajo es 
+* Proyecto Final:   20%. El proyecto final tendrá una presentación y unos entregables. El objetivo de este trabajo es 
   integrar todo lo aprendido durante el semestre.
 
-Para la exposición de tópicos de actualidad
+Para la exposición del proyecto final
 --------------------------------------------
 * El trabajo es en equipo.
 * La presentación inicia con un demo. 
@@ -71,7 +71,7 @@ Retos interesantes
 -------------------
 Algunas aplicaciones interesantes para explorar:
 
-* `Realidad aumentada y IoT <https://drive.google.com/open?id=1O0uzoxnCCDrGVup1ObTWeo4VWyzOCOgOdp0ko82gXjU>`__
+* `Realidad aumentada y IoT <https://drive.google.com/open?id=1O0uzoxnCCDrGVup1ObTWeo4VWyzOCOgOdp0ko82gXjU>`__.
 
 * Location based VR:
 
@@ -79,7 +79,7 @@ Algunas aplicaciones interesantes para explorar:
     * `Entrevista a Nomadic <https://www.youtube.com/watch?v=gYRwSrli8yk>`__.
     * `Montaje de la experiencia de Nomadic <https://www.youtube.com/watch?v=EIc9v7x9sUs&t=99s>`__. (minuto 5:27)
 
-* Realidad Mixta: `video <https://www.youtube.com/watch?v=7m6J8W6Ib4w>`__, `blog <http://blog.leapmotion.com/northstar/>`__.
+* Realidad Mixta: `video <https://www.youtube.com/watch?v=7m6J8W6Ib4w>`__, `blog <http://blog.leapmotion.com/northstar/>`__,
   `montaje <https://leapmotion.github.io/ProjectNorthStar/>`__.
 
 .. toctree::
