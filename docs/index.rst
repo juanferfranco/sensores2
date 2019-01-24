@@ -26,7 +26,7 @@ El entendimiento y la creación de sistemas que integren sensores, actuadores y 
 entorno físico y también modificarlo permitiendo de esta manera el prototipado y la producción de experiencias interactivas.
 
 Competencia
------------
+------------
 Analiza, diseña, evalúa e implementa soluciones interactivas de  acuerdo a requerimientos condicionados por el contexto.
 
 Estructura y metodología del curso
@@ -35,7 +35,7 @@ En las sesiones de trabajo autónomo se deben realizar lecturas del material te�
 prácticos. En las sesiones presenciales se realizarán lecturas cortas y ejercicios practicos.
 
 Cronograma
-----------
+-----------
 `Tabla de actividades <https://drive.google.com/open?id=1uG9HTpfMT13Qh_PItAaIMwQFhZH5mUrLrL6yTPfmmvU>`__.
 
 Evaluación
