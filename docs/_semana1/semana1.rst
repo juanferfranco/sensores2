@@ -6,7 +6,7 @@ integrar sensores y actuadores a sistemas de cómputo y en especial algunos moto
 Objetivo
 ---------
 1. Conceptos básicos de sistemas operativos
-2. Integración de sensores y actuadores a Unity.  
+2. Integración de sensores y actuadores a Unity mediante el uso del puerto serial.  
 
 Material de referencia
 -----------------------
