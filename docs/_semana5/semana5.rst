@@ -9,5 +9,3 @@ estudiaremos la implementación de FreeRTOS en la plataforma ESP32. Dicho sistem
 dicha plataforma el framework de arduino y también las bibliotecas de soporte para realizar aplicaciones de internet of 
 things de Amazon.
 
-
-
