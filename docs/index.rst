@@ -42,10 +42,10 @@ Evaluación
 -----------
 La evaluación del curso se dividirá en dos componentes:
 
-* Proyectos: 80% (ver en el cronograma el valor de cada proyecto). Cada proyecto será evaluado en una sesión posterior
+* Proyectos: 70% (ver en el cronograma el valor de cada proyecto). Cada proyecto será evaluado en una sesión posterior
   al proyecto. La evaluación será a libro cerrado. Solo se podrá sacar, impresa, la solución del proyecto.
 
-* Proyecto Final:   20%. El proyecto final tendrá una presentación y unos entregables. El objetivo de este trabajo es 
+* Proyecto Final:   30%. El proyecto final tendrá una presentación y unos entregables. El objetivo de este trabajo es 
   integrar todo lo aprendido durante el semestre.
 
 Para la exposición del proyecto final
