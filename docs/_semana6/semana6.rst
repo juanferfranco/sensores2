@@ -1619,6 +1619,8 @@ tiempo relativo entre llamados a la función vTaskDelay presentará variabilidad
 El resultado debe ser el mismo del código anterior.
 
 
+.. _colas_timers_freertos:
+
 Más ejercicios con el API de FreeRTOS
 ---------------------------------------
 Para realizar los siguientes ejercicio es necesario tener a la mano dos documentos:
