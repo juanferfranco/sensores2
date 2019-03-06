@@ -43,32 +43,30 @@ Aquí está el código de referencia:
       }
     
     }
- 
-
-// En este caso la tarea de arduino autoenviará y recibirá sus propios
-// mensajes 
-void loop() {
-  int element;
-  // Si no hay cola, no hago nada: esta es la acción que tomamos
-  // si no hay cola.
-  
-  if(queue == NULL)return;
- 
-  // Generar 10 mensajes para enviar a la cola 
-  for(int i = 0; i<10; i++){
-    xQueueSend(queue, &i, portMAX_DELAY);
-  }
- 
-  // Lee los 10 mensajes
-  for(int i = 0; i<10; i++){
-    xQueueReceive(queue, &element, portMAX_DELAY);
-    Serial.print(element);
-    Serial.print("|");
-  }
- 
-  Serial.println();
-  delay(1000);
-}
+    // En este caso la tarea de arduino autoenviará y recibirá sus propios
+    // mensajes 
+    void loop() {
+      int element;
+      // Si no hay cola, no hago nada: esta es la acción que tomamos
+      // si no hay cola.
+      
+      if(queue == NULL)return;
+    
+      // Generar 10 mensajes para enviar a la cola 
+      for(int i = 0; i<10; i++){
+        xQueueSend(queue, &i, portMAX_DELAY);
+      }
+    
+      // Lee los 10 mensajes
+      for(int i = 0; i<10; i++){
+        xQueueReceive(queue, &element, portMAX_DELAY);
+        Serial.print(element);
+        Serial.print("|");
+      }
+    
+      Serial.println();
+      delay(1000);
+    }
 
 Tenga en cuenta que al leer datos de la cola, si esta está vacía, la tarea será bloqueada portMAX_DELAY, es decir,
 indefinidamente hasta que lleguen datos. Note también que en FreeRTOS es posible preguntar si hay datos en la cola 
