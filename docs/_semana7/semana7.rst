@@ -26,23 +26,23 @@ Aquí está el código de referencia:
 .. code-block:: cpp
    :lineno-start: 1
 
-// variable para almacenar la referencia a la cola
-QueueHandle_t queue; 
- 
-void setup() {
- 
-  Serial.begin(115200);
- 
-  // Creación de la cola, de 10 items cada uno del tamaño de un entero.
-  queue = xQueueCreate( 10, sizeof( int ) );
- 
-  // verifica si fue posible crear la cola de lo contrario el programación
-  // no debería continuar o debería tomar alguna acción al respecto ;)
-  if(queue == NULL){
-    Serial.println("Error creating the queue");
-  }
- 
-}
+    // variable para almacenar la referencia a la cola
+    QueueHandle_t queue; 
+    
+    void setup() {
+    
+      Serial.begin(115200);
+    
+      // Creación de la cola, de 10 items cada uno del tamaño de un entero.
+      queue = xQueueCreate( 10, sizeof( int ) );
+    
+      // verifica si fue posible crear la cola de lo contrario el programación
+      // no debería continuar o debería tomar alguna acción al respecto ;)
+      if(queue == NULL){
+        Serial.println("Error creating the queue");
+      }
+    
+    }
  
 
 // En este caso la tarea de arduino autoenviará y recibirá sus propios
