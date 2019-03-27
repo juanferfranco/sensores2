@@ -19,7 +19,7 @@ Material de Referencia
 `Aquí <https://drive.google.com/open?id=1A5mUIMiL8_nxpgoeCZLFX_T_KP2Rf2Lur32tZGQTD6s>`__ esta el 
 enlace con el material introductorio.
 
-El `framework de arduino <https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/peripherals/spi_master.html>`__ 
+El `framework de arduino <https://www.arduino.cc/en/Reference/SPI>`__ 
 soporte el bus SPI.
 
 
