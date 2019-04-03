@@ -48,4 +48,6 @@ consideraciones:
 
 * `Planos <http://robotdyn.com/pub/media/0G-00005695==D1mini-SHLD-RTCDS1307/DOCS/Schematic==0G-00005695==D1mini-SHLD-RTCDS1307.pdf>`__ 
   del sensor.
-  
+
+* En los planos se puede ver un circuito convertidor bidireccionar de 3.3V a 5V similar a 
+  `este <https://cdn.sparkfun.com/datasheets/BreakoutBoards/Logic_Level_Bidirectional.pdf>`__
