@@ -1,25 +1,6 @@
-Semana 11
+Semana 12
 ===========
-Esta semana vamos a estudiar el API que ofrece Arduino para interactuar con dispositivos sensores y actuadores por I2C. 
-
-Objetivos
-----------
-
-1. Estudiar el API I2C de Arduino.
-2. Realizar ejercicios de integración entre controladores y sensores mediante I2C.
-
-API I2C Arduino
--------------------
-
-El material de referencia se encuentra `aquí <https://drive.google.com/open?id=1Hg5zy4VJLpjAjO-xdBMAljGYHGpOJRmjZoIGko7Xldo>`__.
-
-Ejercicios
------------
-
-Reto 1:
-^^^^^^^^
-Se propone realizar un chat entre dos terminales seriales ASCII. Las terminales están conectadas por medio de dos arduinos, 
-que a su vez se conectan utilizando I2C.
+Esta semana vamos terminar el reto 2 planteado la semana pasada.
 
 Reto 2:
 ^^^^^^^^
