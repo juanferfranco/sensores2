@@ -1,6 +1,6 @@
 Semana 15
 ===========
-Durante la semana pasado y en la primera sesión de esta semana utilizamos TCP/IP y el model cliente servidor para 
+Durante la semana pasado y en la primera sesión de esta semana utilizamos TCP/IP y el modelo cliente servidor para 
 integrar sensores y actuadores utilizando WiFi. En esta sesión vamos a utilizar el protocolo UDP.
 
 Objetivos

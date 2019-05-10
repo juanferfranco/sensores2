@@ -91,3 +91,7 @@ el estado de un LED. El programa correrá en un computador y el sensor y actuado
 Ejercicio 3:
 -------------
 Simule dos sensores y actuadores más, para un total de 3.
+
+Evaluación:
+-------------
+`Aquí <https://drive.google.com/open?id=1YBR2PzvetRaP4r6DJXc_-vNqijYvx3Jxd_LlYVPvAbQ>`__ está el enlace a la evaluación. 
