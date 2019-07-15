@@ -29,4 +29,10 @@ Considerando:
     IMPORTANTE: antes de comenzar a programar. Lea el código fuente y escriba una estrategia para solucionar el problema. Discuta con 
     sus compañeros y con el profesor.
 
-4. Como no tenemos el sensor físico, simule su funcionamiento programando un arduino de tal manera que siga el protocolo establecido. 
+4. Como no tenemos el sensor físico, vamos a simular su funcionamiento programando un arduino de tal manera que siga el protocolo 
+   establecido. 
+5. En `este <https://drive.google.com/open?id=1iVr2Fiv8wXLqNyShr_EOplSvOJBIPqJP>`__ archivo hay una secuencia de comandos y posibles 
+   respuestas del sensor. Vamos a utilizar esta información para realizar la simuluación.
+
+
+
