@@ -1,8 +1,6 @@
 Semana 2
 ===========
-Durante esta semana trabajamos y terminamos el material propuesto la semana pasada.
-
-Material de referencia
------------------------
-Los ejercicios de esta semana los realizaremos en base al material del blog de Alan Zucconi. La guía de trabajo se encuentra 
-en este `enlace <https://drive.google.com/open?id=1GbBn3hNteY9uzXQ5SxJPEJ2aRVZ0WjspKaiaUdzOoUM>`__.
+Durante esta semana terminaremos el reto planteado la semana pasa.
+VER CRONOGRAMA. En la sesión 1 continuaremos con el trabajo en clase. Se espera 
+que en la sesión de trabajo autónomo se termine el ejercicio. En la sesión 2, 
+vamos a analizar una posible solución.
