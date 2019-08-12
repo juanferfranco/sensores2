@@ -1,9 +1,9 @@
 Semana 5
 ===========
 Esta semana vamos a realizar algunos retos relacionados con los buses I2C y SPI.
-Para el reto de esta primera sesión vamos a conectar un controlador a un sensor I2C; 
-sin embargo, el resto consiste en implementar sólo con el API de arduino la comunicación. 
-No vamos a buscar, ni utilizar bibliotecas para el sensor.
+Para el reto de esta primera sesión vamos a conectar un controlador a un sensor I2C. 
+El reto consiste en implementar, sólo con el API de arduino, la comunicación I2C con 
+el sensor. No vamos a buscar, ni utilizar bibliotecas para el sensor.
 
 El material que se encuentra 
 `aquí <https://drive.google.com/open?id=1Hg5zy4VJLpjAjO-xdBMAljGYHGpOJRmjZoIGko7Xldo>`__ 
@@ -16,8 +16,10 @@ Ejercicios
 
 Reto 1:
 ^^^^^^^^
-En este reto vamos a conectar un sensor a un controlador mediante el bus I2C. Este reto tendrá las siguientes 
-consideraciones:
+En este reto vamos a conectar un sensor a un controlador mediante el bus I2C. 
+Este reto tendrá las siguientes consideraciones:
+
+* Lea todas las consideraciones hasta el final.
 
 * Reto personal: NO BUSCAR EN INTERNET la solución, NO BUSCAR EN INTERNET soluciones 
   similares para basarse en ellas, SE PUEDE CONSULTAR la documentación de I2C de Arduino, 
@@ -48,5 +50,8 @@ consideraciones:
 * En los planos se puede ver un circuito convertidor bidireccionar de 3.3V a 5V similar a 
   `este <https://cdn.sparkfun.com/datasheets/BreakoutBoards/Logic_Level_Bidirectional.pdf>`__
 
+* Tenga presente los niveles de alimentación del sensor: 5V, 3.3V, GND.
 
+* La interfaz I2C será a 3.3V. Las resistencias de pullup ya están en el sensor como puede
+  observar en los planos.
 
