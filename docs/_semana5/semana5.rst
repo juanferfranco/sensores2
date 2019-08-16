@@ -66,7 +66,7 @@ Requisitos
 ------------
 
 * El sensor I2C será un RTC, el sensor SPI será un sensor de temperatura, presión y altitud. Estas son 
-  las variables a medir.
+  las variables a medir.Los sensores SPI pueden ser BMP280 o BME280.
 * Diseñar una interfaz de usuario en Unity agradable y fácil de usar para un usuario sin 
   cononocimientos técnicos.
 * La aplicación presentará el valor de las variables.
