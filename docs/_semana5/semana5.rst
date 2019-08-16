@@ -14,7 +14,7 @@ un esclavo. Para el reto de esta sesión, sólo haremos uso del API I2C para el 
 Ejercicios
 -----------
 
-Reto 1:
+Reto:
 ^^^^^^^^
 En este reto vamos a conectar un sensor a un controlador mediante el bus I2C. 
 Este reto tendrá las siguientes consideraciones:
@@ -54,4 +54,51 @@ Este reto tendrá las siguientes consideraciones:
 
 * La interfaz I2C será a 3.3V. Las resistencias de pullup ya están en el sensor como puede
   observar en los planos.
+
+
+Evaluación sumativa número 1
+-----------------------------
+
+Descripción: construir una aplicación interactiva utilizando Unity, un sensor I2C, un sensor SPI y 
+controlador y el framework de arduino.
+
+Requisitos
+------------
+
+* El sensor I2C será un RTC, el sensor SPI será un sensor de temperatura, presión y altitud. Estas son 
+  las variables a medir.
+* Diseñar una interfaz de usuario en Unity agradable y fácil de usar para un usuario sin 
+  cononocimientos técnicos.
+* La aplicación presentará el valor de las variables.
+* La aplicación debe contar con un mecanismo de entrada en la interfaz de usuario que solicite el valor
+  de cada una de las variables de manera independiente. Solo debe actualizar el valor de la variable 
+  solicitada.
+* El valor de la varible deberá ser enriquecido con el instante de tiempo y la fecha de la última lectura.
+* Al iniciar la aplicación se debe presentar el valor de las variables y la hora y fecha de adquisición de 
+  cada una.
+* La aplicación deberá tener una opción para configurar el RTC a la hora y fecha correcta.
+* Diseñar un protocolo de integración entre la aplicación en Unity y el controlador.
+
+Valoración
+------------
+
+* Funcionamiento según los requisitos del cliente (40%).
+* Portafolio en internet con: video del funcionamiento con explicación (30%) y la 
+  documentación (informe escrito) (30%).
+* Informe escrito: debe explicar detalladamente cómo funciona la aplicación. 
+* Informe escrito: debe explicar detalladamente cómo está construida la aplicación. No olvide mencionar 
+  cada aspecto, es decir, programa en Unity, sensores, programa de arduino y PROTOCOLO de integración.
+
+Sustentación
+-------------
+La sustentación se realizará el 22 de agosto en la sesión de clase. 
+Deberá traer todos los materiales necesarios para reproducir la aplicación solicitada 
+(Unity, arduino, sensores) y computador con las herramientas instaladas y configuradas.
+
+La sustentación consiste en realizar una modificación, cambio, adición, mejora a la aplicación solicitada.
+
+Valoración Final
+-----------------
+Nota final = (LO SOLICITADO ) * sustentación. Donde la sustentación tendrá un valor de 0 a 1 
+y será un factor multiplicativo de lo solicitado.
 
