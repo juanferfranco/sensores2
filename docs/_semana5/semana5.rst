@@ -73,7 +73,7 @@ Requisitos
 * La aplicación debe contar con un mecanismo de entrada en la interfaz de usuario que solicite el valor
   de cada una de las variables de manera independiente. Solo debe actualizar el valor de la variable 
   solicitada.
-* El valor de la varible deberá ser enriquecido con el instante de tiempo y la fecha de la última lectura.
+* El valor de la variable deberá ser enriquecido con el instante de tiempo y la fecha de la última lectura.
 * Al iniciar la aplicación se debe presentar el valor de las variables y la hora y fecha de adquisición de 
   cada una.
 * La aplicación deberá tener una opción para configurar el RTC a la hora y fecha correcta.
@@ -106,8 +106,8 @@ Plazos
 -------
 
 * Enviar al correo del profesor el enlace al portafolio indicando claramente donde está todo lo solicitado.
-* El plazo máximo es el jueves 22 a las 12 de la noche para enviar el enlace con toda la información completa. 
+* El plazo máximo es el jueves 22 de agosto de 2019 a las 12 de la noche para enviar el enlace con toda la información completa. 
   Luego del plazo se penalizará la entrega 1 unidad hastas las 6 a.m. del 23 de agosto. Luego de esta hora, no se recibirán trabajos.
 * La sustentación es presencial. En caso de inasistencia debe solicitar autorización del director de la facultad para presentar 
   supletorio.
-* La sustentación deberá ser entregada el 23 de agosto antes de las 7:40 a.m. a un enlace suministrado por el profesor.
+* La sustentación deberá ser entregada el 23 de agosto de 2019 antes de las 7:40 a.m. a un enlace suministrado por el profesor.
