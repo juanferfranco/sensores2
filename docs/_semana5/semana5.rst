@@ -102,3 +102,5 @@ Valoración Final
 Nota final = (LO SOLICITADO ) * sustentación. Donde la sustentación tendrá un valor de 0 a 1 
 y será un factor multiplicativo de lo solicitado.
 
+Plazos
+-------
