@@ -1,6 +1,7 @@
 Semana 13
 ===========
-Esta semana vamos a introducir los conceptos necesarios para interconectar sensores y actuadores en red utilizando WiFi. 
+Esta semana vamos a introducir los conceptos necesarios para interconectar sensores y actuadores en 
+red utilizando WiFi. 
 
 Objetivos
 ----------
