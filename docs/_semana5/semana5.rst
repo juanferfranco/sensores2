@@ -106,8 +106,8 @@ Plazos
 -------
 
 * Enviar al correo del profesor el enlace al portafolio indicando claramente donde está todo lo solicitado.
-* El plazo máximo es el jueves 22 de agosto de 2019 a las 12 de la noche para enviar el enlace con toda la información completa. 
-  Luego del plazo se penalizará la entrega 1 unidad hastas las 6 a.m. del 23 de agosto. Luego de esta hora, no se recibirán trabajos.
+* El plazo máximo es el jueves 29 de agosto de 2019 a las 12 de la noche para enviar el enlace con toda la información completa. 
+  Luego del plazo se penalizará la entrega 1 unidad hastas las 6 a.m. del 30 de agosto. Luego de esta hora, no se recibirán trabajos.
 * La sustentación es presencial. En caso de inasistencia debe solicitar autorización del director de la facultad para presentar 
   supletorio.
 * La sustentación deberá ser entregada el 23 de agosto de 2019 antes de las 7:40 a.m. a un enlace suministrado por el profesor.
