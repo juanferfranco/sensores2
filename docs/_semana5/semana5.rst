@@ -110,4 +110,6 @@ Plazos
   Luego del plazo se penalizará la entrega 1 unidad hastas las 6 a.m. del 30 de agosto. Luego de esta hora, no se recibirán trabajos.
 * La sustentación es presencial. En caso de inasistencia debe solicitar autorización del director de la facultad para presentar 
   supletorio.
-* La sustentación deberá ser entregada el 23 de agosto de 2019 antes de las 7:40 a.m. a un enlace suministrado por el profesor.
+* La sustentación deberá ser entregada el 30 de agosto de 2019 antes de las 7:40 a.m. a un enlace suministrado por el profesor.
+
+
