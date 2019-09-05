@@ -24,5 +24,8 @@ soporte el bus SPI.
 
 
 
-
+Sustentación parcial 1
+-------------------------
+En este `enlace <https://drive.google.com/open?id=1wlD7Lxjqr7CV8DbnAp_7Y5KiCOVtX5JeoEEPrFzTvD4>`__ se 
+encuentran las condiciones para la sustentación.
 

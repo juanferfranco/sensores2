@@ -16,7 +16,4 @@ Guía de trabajo
 La guía de trabajo para esta semana esta 
 `aquí <https://drive.google.com/open?id=1vQTOPIwIOOxk0b8H0f0Rai9CGtGBcA3g26WSWqs_9hM>`__.
 
-Sustentación parcial 1
--------------------------
-En este `enlace <https://drive.google.com/open?id=1wlD7Lxjqr7CV8DbnAp_7Y5KiCOVtX5JeoEEPrFzTvD4>`__ se 
-encuentran las condiciones para la sustentación.
+
