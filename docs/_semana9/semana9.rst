@@ -91,3 +91,9 @@ el estado de un LED. El programa correrá en un computador y el sensor y actuado
 Ejercicio 3:
 -------------
 Simule dos sensores y actuadores más, para un total de 3.
+
+Sustentación
+-------------
+
+`Aquí <https://drive.google.com/open?id=1wlD7Lxjqr7CV8DbnAp_7Y5KiCOVtX5JeoEEPrFzTvD4>`__ está
+el enunciado de la sustentación.
