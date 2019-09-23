@@ -9,7 +9,7 @@ En la implementación de una experiencia interactiva se debe integrar por medio 
 requerimientos:
 
 * El sensor debe tener interfaz I2C o SPI.
-* El actuador.
+* El actuador es digital.
 * El sistema de cómputo debe contar con una interfaz de usuario que permita recolectar 
   y visualizar la información del sensor.
 * La interfaz de usuario debe proveer un mecanismo para controlar el actuador.
