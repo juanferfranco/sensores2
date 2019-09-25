@@ -13,7 +13,7 @@ requerimientos:
 * El sistema de cómputo debe contar con una interfaz de usuario que permita recolectar 
   y visualizar la información del sensor.
 * La interfaz de usuario debe proveer un mecanismo para controlar el actuador.
-* Cada elemente del sistema, es decir, el sensor, el actuador y el sistema de cómputo se 
+* Cada elemento del sistema, es decir, el sensor, el actuador y el sistema de cómputo se 
   comunica entre si por medio de WiFi.
 * Proponga una experiencia interactiva que utilice el sistema propuesto.
 
