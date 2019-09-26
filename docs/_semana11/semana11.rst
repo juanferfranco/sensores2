@@ -24,7 +24,7 @@ Sustentación
 * Actualice su portafolio por medio de un video que muestre detalledamente el sistema 
   funcionando.
 * Realice una presentación que tenga los siguientes elementos:
-    * DISEÑO la duración de la presentación para 12 minutos.
+    * DISEÑE la duración de la presentación para 12 minutos.
     * Si la presentación supera los 12 minutos se cortará para darle paso a otra.
     * Muestre su propuesta de experiencia interactiva.
     * Muestre el sistema funcionando.
