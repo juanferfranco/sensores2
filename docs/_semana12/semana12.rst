@@ -8,8 +8,24 @@ Material
 En `este enlace <https://drive.google.com/open?id=1rkSL-DyORk19jfnax9FUph7jeXIgKb4Zl1eBfyVtQrQ>`__ 
 se encuentra el material para la sesión 1
 
-Reto
------
+Reto 1
+-------
 Una vez analizado el material, se propone realizar una aplicación simple en Unity que se conecte 
-con una aplicación como hercules y segundo que se conecte a un sensor.
+con una aplicación como hercules y luego se conecte a un sensor.
+
+Reto 2
+-------
+Incrementar la aplicación anterior con dos sensores y un actuador.
+
+Proyecto Final
+----------------
+* Diseñar e implementar una experiencia interactiva que integre 2 sensores y un actuador a 
+  Unity utilizando el protocolo de transporte UDP. Los sensores DEBEN tener interfaz serial,  
+  I2C o SPI.
+
+* Presentar el diseño el viernes 11 de octubre.
+
+* Preentrega con la implementación el lunes 28 de octubre.
+
+* Entrega Final el viernes 1 de noviembre.
 
