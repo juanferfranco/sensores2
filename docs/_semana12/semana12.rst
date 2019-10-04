@@ -27,5 +27,6 @@ Proyecto Final
 
 * Preentrega con la implementación el lunes 28 de octubre.
 
-* Entrega Final el viernes 1 de noviembre.
-
+* Entrega Final el viernes 1 de noviembre. Realizar una presentación con explicación 
+  del sistema (1 unidad en la nota), DEMO del funcionamiento (1 unidad en la nota), 
+  mostrar el portafolio (1 unidad en la nota).
