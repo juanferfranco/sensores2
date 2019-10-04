@@ -15,7 +15,8 @@ con una aplicación como hercules y luego se conecte a un sensor.
 
 Reto 2
 -------
-Incrementar la aplicación anterior con dos sensores y un actuador.
+Incrementar la aplicación anterior con dos sensores y un actuador. Cada sensor y el actuador 
+debe tener su propia dirección IP.
 
 Proyecto Final
 ----------------
