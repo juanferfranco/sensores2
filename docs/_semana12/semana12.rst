@@ -21,7 +21,8 @@ Proyecto Final
 ----------------
 * Diseñar e implementar una experiencia interactiva que integre 2 sensores y un actuador a 
   Unity utilizando el protocolo de transporte UDP. Los sensores DEBEN tener interfaz serial,  
-  I2C o SPI.
+  I2C o SPI. Los sensores y actuador DEBEN ser 3 DISPOSITIVOS INDEPENDIENTES cada uno con 
+  su propia dirección IP.
 
 * Presentar el diseño el viernes 11 de octubre.
 
