@@ -1,6 +1,6 @@
 Semana 13
 ===========
-Esta semanas veremos varias maneras de provisionar la red WiFi a los 
+Esta semana veremos varias maneras de provisionar la red WiFi a los 
 sensores/actuadores y diferentes maneras de asignar la dirección de IP.
 
 Sesión 1
