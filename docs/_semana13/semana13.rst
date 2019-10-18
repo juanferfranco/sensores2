@@ -19,4 +19,4 @@ Material Adicional
 --------------------
 Para provisionar el ESP8266 contamos con la biblioteca `WiFiManager <https://github.com/tzapu/WiFiManager>`__. Sin embargo,
 para el ESP32 la biblioteca anterior aún no es compatible. Otra biblioteca 
-que podemos utilizar para est último procesador es `IotWebConf <https://github.com/prampec/IotWebConf>`__.
+que podemos utilizar para este último procesador es `IotWebConf <https://github.com/prampec/IotWebConf>`__.
