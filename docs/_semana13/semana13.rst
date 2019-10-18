@@ -14,3 +14,9 @@ Sesión 2
 En esta sesión realizaremos la presentación del diseño de cada una de las 
 experiencias finales. Se presentará el concepto y las caracterísitcas 
 técnicas del sistema.
+
+Material Adicional
+--------------------
+Para provisionar el ESP8266 contamos con la biblioteca `WiFiManager <https://github.com/tzapu/WiFiManager>`__. Sin embargo,
+para el ESP32 la biblioteca anterior aún no es compatible. Otra biblioteca 
+que podemos utilizar para est último procesador es `IotWebConf <https://github.com/prampec/IotWebConf>`__.
