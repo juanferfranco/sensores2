@@ -1,4 +1,4 @@
-Curso Sensores y Actuadores 2 / 2019-20
+Curso Sensores y Actuadores 2 / 2020-10
 ========================================
 
 ¿Para qué sirve este curso?
