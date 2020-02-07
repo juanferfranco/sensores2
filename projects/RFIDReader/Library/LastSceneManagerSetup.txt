@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Ardity/Scenes/DemoScene_CustomDelimiter.unity
+  isLoaded: 1
+  isActive: 1
