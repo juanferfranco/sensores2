@@ -93,20 +93,12 @@ El código para el protocolo:
 
         protected override object ReadFromWire(SerialPort serialPort)
         {
-            if(serialPort.BytesToRead > 0)
+            if(serialPort.BytesToRead >= 6)
             {
-                serialPort.Read(buffer, 0, 1);
-                bufferUsed = 1;
-                // wait for the rest of data
-
-                while ( bufferUsed < 6)
-                {
-                    bufferUsed = bufferUsed + serialPort.Read(buffer, bufferUsed, 5);
-                }
-
+                
+                bufferUsed = serialPort.Read(buffer, 0, 6);
                 byte[] returnBuffer = new byte[bufferUsed];
                 System.Array.Copy(buffer, returnBuffer, bufferUsed);
-                bufferUsed = 0;
     /*
                 StringBuilder sb = new StringBuilder();
                 sb.Append("Packet: ");
@@ -117,6 +109,7 @@ El código para el protocolo:
                 sb.Append("Checksum fails");
                 Debug.Log(sb);
     */
+
                 return returnBuffer;
             }
             else
@@ -159,8 +152,6 @@ El código del controlador:
         [Tooltip("Maximum number of unread data messages in the queue. " +
                 "New messages will be discarded.")]
         public int maxUnreadMessages = 1;
-        public const string SERIAL_DEVICE_CONNECTED = "__Connected__";
-        public const string SERIAL_DEVICE_DISCONNECTED = "__Disconnected__";
 
         // Internal reference to the Thread and the object that runs in it.
         protected Thread thread;
@@ -419,7 +410,7 @@ El código de la clase AbstractSerialThread
                         // to the console and notify the listener.
                         Debug.LogWarning("Exception: " + ioe.Message + " StackTrace: " + ioe.StackTrace);
                         if (enqueueStatusMessages)
-                            inputQueue.Enqueue(Controller.SERIAL_DEVICE_DISCONNECTED);
+                            inputQueue.Enqueue("__Disconnected__");
 
                         // As I don't know in which stage the SerialPort threw the
                         // exception I call this method that is very safe in
@@ -465,7 +456,7 @@ El código de la clase AbstractSerialThread
             serialPort.Open();
 
             if (enqueueStatusMessages)
-                inputQueue.Enqueue(Controller.SERIAL_DEVICE_CONNECTED);
+                inputQueue.Enqueue("__Connected__");
         }
 
         // ------------------------------------------------------------------------
