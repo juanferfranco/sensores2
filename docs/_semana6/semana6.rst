@@ -1,45 +1,650 @@
 Semana 6
 ===========
 
-
-
-
-Esta semana comenzaremos a explorar las posibilidades de conectividad entre el 
-microcontrolador y periféricos externos. Dichos periféricos externos usualmente son 
-sensores, actuadores o dispositivos de comunicación. Estos dispositivos poseen alguna 
-capacidad de cómputo. Comenzaremos estudiando SPI o ``Serial Peripheral Interface``. 
-
-Objetivos
-----------
-
-1. Comprender el funcionamiento del bus SPI.
-
-2. Realizar ejercicios de comunicación entre un microcontrolador y un dispositivo 
-   mediante el uso de SPI.
-
-3. Practicar el uso del bus SPI mediante la comunicación entre un sensor y un 
-   microcontrolador.
-
-
-Material de Referencia
+Solución al parcial 1
 -----------------------
+Una posible solución al parcial 1 correspondiente a la acción de mejora es:
 
-`Aquí <https://drive.google.com/open?id=1A5mUIMiL8_nxpgoeCZLFX_T_KP2Rf2Lur32tZGQTD6s>`__ esta el 
-enlace con el material introductorio.
+Código de arduino
+^^^^^^^^^^^^^^^^^^^
 
-El `framework de arduino <https://www.arduino.cc/en/Reference/SPI>`__ 
-soporte el bus SPI.
+.. code-block:: cpp
+    :linenos:
 
+    void setup() {
+      Serial.begin(115200);
+
+    }
+
+    void loop() {
+      static uint16_t x = 0;
+      static uint16_t y = 0;
+      static uint16_t z = 0;
+      static bool countUp = true;
+
+
+      if (Serial.available()) {
+        if (Serial.read() == 0x73) {
+          Serial.write((uint8_t)(x));
+          Serial.write( (uint8_t)(x >> 8 ));
+          Serial.write((uint8_t)(y));
+          Serial.write((uint8_t)(y >> 8 ));
+          Serial.write((uint8_t)(z));
+          Serial.write((uint8_t)(z >> 8 ));
+
+          if (countUp == true) {
+            if (x < 1000) {
+              x = x + 1;
+              y = y + 1;
+              z = z + 1;
+            }
+            else countUp = false;
+          }
+
+          if (countUp == false)
+          {
+            if (x > 0) {
+              x = x - 1;
+              y = y - 1;
+              z = z - 1;
+            }BME280Pinout.jpeg
+
+El código para el protocolo:
+
+.. code-block:: csharp
+    :linenos:
+
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using System.IO.Ports;
+
+    using System.Text;
+
+    public class Protocol : AbstractSerialThread
+    {
+        // Buffer where a single message must fit
+        private byte[] buffer = new byte[1024];
+        private int bufferUsed = 0;
+
+        public Protocol(string portName,
+                                          int baudRate,
+                                          int delayBeforeReconnecting,
+                                          int maxUnreadMessages)
+            : base(portName, baudRate, delayBeforeReconnecting, maxUnreadMessages, false)
+        {
+
+        }
+
+        protected override void SendToWire(object message, SerialPort serialPort)
+        {
+            byte[] binaryMessage = (byte[])message;
+            serialPort.Write(binaryMessage, 0, binaryMessage.Length);
+        }
+
+        protected override object ReadFromWire(SerialPort serialPort)
+        {
+            if(serialPort.BytesToRead > 0)
+            {
+                serialPort.Read(buffer, 0, 1);
+                bufferUsed = 1;
+                // wait for the rest of data
+
+                while ( bufferUsed < 6)
+                {
+                    bufferUsed = bufferUsed + serialPort.Read(buffer, bufferUsed, 5);
+                }
+
+                byte[] returnBuffer = new byte[bufferUsed];
+                System.Array.Copy(buffer, returnBuffer, bufferUsed);
+                bufferUsed = 0;
+    /*
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Packet: ");
+                foreach (byte data in buffer)
+                {
+                    sb.Append(data.ToString("X2") + " ");
+                }
+                sb.Append("Checksum fails");
+                Debug.Log(sb);
+    */
+                return returnBuffer;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+    }
+
+
+El código del controlador:
+
+.. code-block:: csharp
+    :linenos:
+
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+
+    using System.Threading;
+
+    public class Controller : MonoBehaviour
+    {
+        [Tooltip("Port name with which the SerialPort object will be created.")]
+        public string portName = "/dev/ttyUSB0";
+
+        [Tooltip("Baud rate that the serial device is using to transmit data.")]
+        public int baudRate = 57600;
+
+        [Tooltip("Reference to an scene object that will receive the events of connection, " +
+                "disconnection and the messages from the serial device.")]
+        public GameObject messageListener;
+
+        [Tooltip("After an error in the serial communication, or an unsuccessful " +
+                "connect, how many milliseconds we should wait.")]
+        public int reconnectionDelay = 1000;
+
+        [Tooltip("Maximum number of unread data messages in the queue. " +
+                "New messages will be discarded.")]
+        public int maxUnreadMessages = 1;
+El código del controlador:
+
+.. code-block:: csharp
+    :linenos:
+
+        [Tooltip("Maximum number of unread data messages in the queue. " +
+                "New messages will be discarded.")]
+
+        public const string SERIAL_DEVICE_CONNECTED = "__Connected__";
+        public const string SERIAL_DEVICE_DISCONNECTED = "__Disconnected__";
+
+        // Internal reference to the Thread and the object that runs in it.
+        protected Thread thread;
+        protected Protocol serialThread;
+
+
+        // ------------------------------------------------------------------------
+        // Invoked whenever the SerialController gameobject is activated.
+        // It creates a new thread that tries to connect to the serial device
+        // and start reading from it.
+        // ------------------------------------------------------------------------
+        void OnEnable()
+        {
+            serialThread = new Protocol(portName,
+                                                          baudRate,
+                                                          reconnectionDelay,
+                                                          maxUnreadMessages);
+            thread = new Thread(new ThreadStart(serialThread.RunForever));
+            thread.Start();
+        }
+
+        // ------------------------------------------------------------------------
+        // Invoked whenever the SerialController gameobject is deactivated.
+        // It stops and destroys the thread that was reading from the serial device.
+        // ------------------------------------------------------------------------
+        void OnDisable()
+        {
+            // If there is a user-defined tear-down function, execute it before
+            // closing the underlying COM port.
+            if (userDefinedTearDownFunction != null)
+                userDefinedTearDownFunction();
+
+            // The serialThread reference should never be null at this point,
+            // unless an Exception happened in the OnEnable(), in which case I've
+            // no idea what face Unity will make.
+            if (serialThread != null)
+            {
+                serialThread.RequestStop();
+                serialThread = null;
+            }
+
+            // This reference shouldn't be null at this point anyway.
+            if (thread != null)
+            {
+                thread.Join();
+                thread = null;
+            }
+        }
+
+        // ------------------------------------------------------------------------
+        // Polls messages from the queue that the SerialThread object keeps. Once a
+        // message has been polled it is removed from the queue. There are some
+        // special messages that mark the start/end of the communication with the
+        // device.
+        // ------------------------------------------------------------------------
+        void Update()
+        {
+            // If the user prefers to poll the messages instead of receiving them
+            // via SendMessage, then the message listener should be null.
+            if (messageListener == null)
+                return;
+
+            // Read the next message from the queue
+            byte[] message = ReadSerialMessage();
+            if (message == null)
+                return;
+
+            // Check if the message is plain data or a connect/disconnect event.
+            messageListener.SendMessage("OnMessageArrived", message);
+        }
+
+        // ------------------------------------------------------------------------
+        // Returns a new unread message from the serial device. You only need to
+        // call this if you don't provide a message listener.
+        // ------------------------------------------------------------------------
+        public byte[] ReadSerialMessage()
+        {
+            // Read the next message from the queue
+            return (byte[]) serialThread.ReadMessage();
+        }
+
+        // ------------------------------------------------------------------------
+        // Puts a message in the outgoing queue. The thread object will send the
+        // message to the serial device when it considers it's appropriate.
+        // ------------------------------------------------------------------------
+        public void SendSerialMessage(byte[] message)
+        {
+            serialThread.SendMessage(message);
+        }
+
+        // ------------------------------------------------------------------------
+        // Executes a user-defined function before Unity closes the COM port, so
+        // the user can send some tear-down message to the hardware reliably.
+        // ------------------------------------------------------------------------
+        public delegate void TearDownFunction();
+        private TearDownFunction userDefinedTearDownFunction;
+        public void SetTearDownFunction(TearDownFunction userFunction)
+        {
+            this.userDefinedTearDownFunction = userFunction;
+        }
+
+    }
+
+El código de la clase AbstractSerialThread
+
+.. code-block:: csharp
+    :linenos:
+
+    /**
+    * Ardity (Serial Communication for Arduino + Unity)
+    * Author: Daniel Wilches <dwilches@gmail.com>
+    *
+    * This work is released under the Creative Commons Attributions license.
+    * https://creativecommons.org/licenses/by/2.0/
+    */
+
+    using UnityEngine;
+
+    using System;
+    using System.IO;
+    using System.IO.Ports;
+    using System.Collections;
+    using System.Threading;
+
+    /**
+    * This class contains methods that must be run from inside a thread and others
+    * that must be invoked from Unity. Both types of methods are clearly marked in
+    * the code, although you, the final user of this library, don't need to even
+    * open this file unless you are introducing incompatibilities for upcoming
+    * versions.
+    */
+    public abstract class AbstractSerialThread
+    {
+        // Parameters passed from SerialController, used for connecting to the
+        // serial device as explained in the SerialController documentation.
+        private string portName;
+        private int baudRate;
+        private int delayBeforeReconnecting;
+        private int maxUnreadMessages;
+
+        // Object from the .Net framework used to communicate with serial devices.
+        private SerialPort serialPort;
+
+        // Amount of milliseconds alloted to a single read or connect. An
+        // exception is thrown when such operations take more than this time
+        // to complete.
+        private const int readTimeout = 100;
+
+        // Amount of milliseconds alloted to a single write. An exception is thrown
+        // when such operations take more than this time to complete.
+        private const int writeTimeout = 100;
+
+        // Internal synchronized queues used to send and receive messages from the
+        // serial device. They serve as the point of communication between the
+        // Unity thread and the SerialComm thread.
+        private Queue inputQueue, outputQueue;
+
+        // Indicates when this thread should stop executing. When SerialController
+        // invokes 'RequestStop()' this variable is set.
+        private bool stopRequested = false;
+
+        private bool enqueueStatusMessages = false;
+
+
+        /**************************************************************************
+        * Methods intended to be invoked from the Unity thread.
+        *************************************************************************/
+
+        // ------------------------------------------------------------------------
+        // Constructs the thread object. This object is not a thread actually, but
+        // its method 'RunForever' can later be used to create a real Thread.
+        // ------------------------------------------------------------------------
+        public AbstractSerialThread(string portName,
+                                    int baudRate,
+                                    int delayBeforeReconnecting,
+                                    int maxUnreadMessages,
+                                    bool enqueueStatusMessages)
+        {
+            this.portName = portName;
+            this.baudRate = baudRate;
+            this.delayBeforeReconnecting = delayBeforeReconnecting;
+            this.maxUnreadMessages = maxUnreadMessages;
+            this.enqueueStatusMessages = enqueueStatusMessages;
+
+            inputQueue = Queue.Synchronized(new Queue());
+            outputQueue = Queue.Synchronized(new Queue());
+        }
+
+        // ------------------------------------------------------------------------
+        // Invoked to indicate to this thread object that it should stop.
+        // ------------------------------------------------------------------------
+        public void RequestStop()
+        {
+            lock (this)
+            {
+                stopRequested = true;
+            }
+        }
+
+        // ------------------------------------------------------------------------
+        // Polls the internal message queue returning the next available message
+        // in a generic form. This can be invoked by subclasses to change the
+        // type of the returned object.
+        // It returns null if no message has arrived since the latest invocation.
+        // ------------------------------------------------------------------------
+        public object ReadMessage()
+        {
+            if (inputQueue.Count == 0)
+                return null;
+
+            return inputQueue.Dequeue();
+        }
+
+        // ------------------------------------------------------------------------
+        // Schedules a message to be sent. It writes the message to the
+        // output queue, later the method 'RunOnce' reads this queue and sends
+        // the message to the serial device.
+        // ------------------------------------------------------------------------
+        public void SendMessage(object message)
+        {
+            outputQueue.Enqueue(message);
+        }
+
+
+        /**************************************************************************
+        * Methods intended to be invoked from the SerialComm thread (the one
+        * created by the SerialController).
+        *************************************************************************/
+
+        // ------------------------------------------------------------------------
+        // Enters an almost infinite loop of attempting connection to the serial
+        // device, reading messages and sending messages. This loop can be stopped
+        // by invoking 'RequestStop'.
+        // ------------------------------------------------------------------------
+        public void RunForever()
+        {
+            // This 'try' is for having a log message in case of an unexpected
+            // exception.
+            try
+            {
+                while (!IsStopRequested())
+                {
+                    try
+                    {
+                        AttemptConnection();
+
+                        // Enter the semi-infinite loop of reading/writing to the
+                        // device.
+                        while (!IsStopRequested())
+                            RunOnce();
+                    }
+                    catch (Exception ioe)
+                    {
+                        // A disconnection happened, or there was a problem
+                        // reading/writing to the device. Log the detailed message
+                        // to the console and notify the listener.
+                        Debug.LogWarning("Exception: " + ioe.Message + " StackTrace: " + ioe.StackTrace);
+                        if (enqueueStatusMessages)
+                            inputQueue.Enqueue(Controller.SERIAL_DEVICE_DISCONNECTED);
+
+                        // As I don't know in which stage the SerialPort threw the
+                        // exception I call this method that is very safe in
+                        // disregard of the port's status
+                        CloseDevice();
+
+                        // Don't attempt to reconnect just yet, wait some
+                        // user-defined time. It is OK to sleep here as this is not
+                        // Unity's thread, this doesn't affect frame-rate
+                        // throughput.
+                        Thread.Sleep(delayBeforeReconnecting);
+                    }
+                }
+
+                // Before closing the COM port, give the opportunity for all messages
+                // from the output queue to reach the other endpoint.
+                while (outputQueue.Count != 0)
+                {
+                    SendToWire(outputQueue.Dequeue(), serialPort);
+                }
+
+                // Attempt to do a final cleanup. This method doesn't fail even if
+                // the port is in an invalid status.
+                CloseDevice();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Unknown exception: " + e.Message + " " + e.StackTrace);
+            }
+        }
+
+        // ------------------------------------------------------------------------
+        // Try to connect to the serial device. May throw IO exceptions.
+        // ------------------------------------------------------------------------
+        private void AttemptConnection()
+        {
+
+            Debug.Log("Openening the serial port");
+            serialPort = new SerialPort(portName, baudRate);
+            serialPort.ReadTimeout = readTimeout;
+            serialPort.WriteTimeout = writeTimeout;
+            serialPort.DtrEnable = true;
+            serialPort.Open();
+
+            if (enqueueStatusMessages)
+                inputQueue.Enqueue(Controller.SERIAL_DEVICE_CONNECTED);
+        }
+
+        // ------------------------------------------------------------------------
+        // Release any resource used, and don't fail in the attempt.
+        // ------------------------------------------------------------------------
+        private void CloseDevice()
+        {
+            if (serialPort == null)
+                return;
+
+            try
+            {
+                serialPort.Close();
+            }
+            catch (IOException)
+            {
+                // Nothing to do, not a big deal, don't try to cleanup any further.
+            }
+
+            serialPort = null;
+        }
+
+        // ------------------------------------------------------------------------
+        // Just checks if 'RequestStop()' has already been called in this object.
+        // ------------------------------------------------------------------------
+        private bool IsStopRequested()
+        {
+            lock (this)
+            {
+                return stopRequested;
+            }
+        }
+
+        // ------------------------------------------------------------------------
+        // A single iteration of the semi-infinite loop. Attempt to read/write to
+        // the serial device. If there are more lines in the queue than we may have
+        // at a given time, then the newly read lines will be discarded. This is a
+        // protection mechanism when the port is faster than the Unity progeram.
+        // If not, we may run out of memory if the queue really fills.
+        // ------------------------------------------------------------------------
+        private void RunOnce()
+        {
+            try
+            {
+                // Send a message.
+                if (outputQueue.Count != 0)
+                {
+                    SendToWire(outputQueue.Dequeue(), serialPort);
+                }
+
+                // Read a message.
+                // If a line was read, and we have not filled our queue, enqueue
+                // this line so it eventually reaches the Message Listener.
+                // Otherwise, discard the line.
+                object inputMessage = ReadFromWire(serialPort);
+                if (inputMessage != null)
+                {
+                    if (inputQueue.Count < maxUnreadMessages)
+                    {
+                        inputQueue.Enqueue(inputMessage);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Queue is full. Dropping message: " + inputMessage);
+                    }
+                }
+            }
+            catch (TimeoutException)
+            {
+                // This is normal, not everytime we have a report from the serial device
+            }
+        }
+
+        // ------------------------------------------------------------------------
+        // Sends a message through the serialPort.
+        // ------------------------------------------------------------------------
+        protected abstract void SendToWire(object message, SerialPort serialPort);
+
+        // ------------------------------------------------------------------------
+        // Reads and returns a message from the serial port.
+        // ------------------------------------------------------------------------
+        protected abstract object ReadFromWire(SerialPort serialPort);
+    }
+
+Finalmente el código de la aplicación
+
+.. code-block:: csharp
+    :linenos:
+
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using System.Text;
+
+    public class App : MonoBehaviour
+    {
+        public Controller serialController;
+        private float timer = 0.0f;
+        private float waitTime = 0.005f;
+
+        private Transform objTransform;
+        private Vector3 scaleChange;
+
+
+        // Initialization
+        void Start()
+        {
+            serialController = GameObject.Find("SerialController").GetComponent<Controller>();
+            objTransform = GetComponent<Transform>();
+            scaleChange = new Vector3(0f, 0f, 0f);
+        }
+
+        // Executed each frame
+        void Update()
+        {
+
+          //---------------------------------------------------------------------
+            // Send data
+            //---------------------------------------------------------------------
+            if (Input.GetKeyUp(KeyCode.Q))
+            {
+                //Debug.Log("Get data 0x73 ");
+                serialController.SendSerialMessage(new byte[] { 0x73});
+            }
+
+            timer += Time.deltaTime;
+            if (timer > waitTime)
+            {
+                timer = timer - waitTime;
+
+                serialController.SendSerialMessage(new byte[] { 0x73});
+            }
+
+
+
+            //---------------------------------------------------------------------
+            // Receive data
+            //---------------------------------------------------------------------
+
+            byte[] message = serialController.ReadSerialMessage();
+
+            if (message == null)
+                return;
+
+            float x = ((float)System.BitConverter.ToUInt16(message, 0) ) / 500F;
+            float y = ((float)System.BitConverter.ToUInt16(message, 2) ) / 500F;
+            float z = ((float)System.BitConverter.ToUInt16(message, 4) ) / 500F;
+            scaleChange.Set(x,y,z);
+
+            objTransform.localScale =  scaleChange;
+
+    /*         StringBuilder sb = new StringBuilder();
+            sb.Append("Packet: ");
+            foreach (byte data in message)
+            {
+                sb.Append(data.ToString("X2") + " ");
+            }
+            Debug.Log(sb); */
+        }
+    }
+
+La configuración del proyecto queda como se muestra en la figura:
+
+.. image:: ../_static/unityProject.png
+   :scale: 40 %
+
+Sesión 1
+-----------
+En esta sesión vamos a experimentar con el controlador ESP32 y el bus SPI.
 
 Ejercicio SPI
----------------
-Realizaremos un ejercicio práctico para conectar un sensor a un controlador utilizando 
-el puerto SPI. El sensor a utilizar será el `BME280 <https://www.bosch-sensortec.com/bst/products/all_products/bme280>`__ de la 
-empresa Bosh. El BME280 es un sensor ambiental que permite medir humedad relativa, 
-presión y temperatura. Como  controlador, vamos a utilizar el ESP32 y el `framework de 
-arduino <https://github.com/espressif/arduino-esp32>`__.
+^^^^^^^^^^^^^^
+Realizaremos un ejercicio práctico para conectar un sensor a un
+controlador utilizando el puerto SPI. El sensor a utilizar será
+el `BME280 <https://www.bosch-sensortec.com/bst/products/all_products/bme280>`__
+de la empresa Bosh. El BME280 es un sensor ambiental que permite
+medir humedad relativa, presión y temperatura. Como  controlador,
+vamos a utilizar el ESP32 y el `framework de arduino <https://github.com/espressif/arduino-esp32>`__.
 
-Para realizar el ejericicio utilizaremos el siguiente material:
+Para realizar el ejercicio utilizaremos el siguiente material:
 
 * API de `arduino <https://www.arduino.cc/en/Reference/SPI>`__.
 * Código fuente del módulo SPI del `ESP32 Arduino Core <https://github.com/espressif/arduino-esp32/tree/master/libraries/SPI/src>`__.
@@ -48,11 +653,12 @@ Para realizar el ejericicio utilizaremos el siguiente material:
 * Tutorial del sensor `BME280 <https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/overview>`__.
 
 Pinouts
-^^^^^^^^^^
+##########
+
 La siguiente figura muestra los pines del sensor a utilizar:
 
 .. image:: ../_static/BME280Pinout.jpeg
-   :scale: 40 %
+   :scale: 100 %
 
 Las señales tienen la siguiente función:
 
@@ -74,18 +680,13 @@ se puede ver información de los pines SPI para el ESP32 pico:
 * CS: pin 5
 
 En `este <https://github.com/espressif/arduino-esp32/raw/master/docs/esp32_pinmap.png>`__ 
-enlace se puede ver otro controlador. 
-
-Y en `este <https://es.aliexpress.com/item/32887251214.html>`__ para otro  
-módulo basado en el ESP32 y el módulo `ESP32-WROOM-32D <https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32d_esp32-wroom-32u_datasheet_en.pdf>`__.
+enlace se puede ver otro controlador.
 
 Los controladores se puede comprar aquí:
 
 `ESP32 pico <https://www.didacticaselectronicas.com/index.php/comunicaciones/bluetooth/tarjeta-de-desarrollo-wifi-y-bluetooth-esp32-pico-kit-esp32-pico-kit-v4-comunicaci%C3%B3n-iot-detail>`__.
 
 `DevKit32 <https://www.didacticaselectronicas.com/index.php/comunicaciones/wi-fi/wifi,-wi-fi,-bluetooth-internet-iot-tarjeta-desarrollo-esp32-detail>`__.
-
-`ESP32-OLED-18650-BAT <https://www.didacticaselectronicas.com/index.php/comunicaciones/wi-fi/m%C3%B3dulo-wifi-esp32-con-soporte-para-bater%C3%ADa-18650-wi-fi-bluetooth-esp32-bater%C3%ADa-18650-pantalla-oled-detail>`__.
 
 Para conectar el sensor con el controlador se procede así:
 
@@ -109,10 +710,11 @@ Para realizar la prueba del sensor es necesario instalar estas dos bibliotecas:
 
 Programa de prueba
 ^^^^^^^^^^^^^^^^^^^^
-Una vez instalada la biblioteca Adafruit BME280. Se debe abrir el ejemplo BME280test.ino. Y realizar las siguiente 
-modificaciones:
+Una vez instalada la biblioteca Adafruit BME280, se debe abrir el ejemplo
+BME280test.ino. Y realizar las siguiente modificaciones:
 
-Comentar la el archivo de cabeceras Wire.h. Este archivo corresponde al API I2C. Modificar el pinout del SPI:
+Comentar la el archivo de cabeceras Wire.h. Este archivo corresponde al API I2C.
+Modificar el pinout del SPI:
 
 .. code-block:: c 
    :lineno-start: 24
@@ -123,7 +725,8 @@ Comentar la el archivo de cabeceras Wire.h. Este archivo corresponde al API I2C.
     #define BME_MOSI 23
     #define BME_CS 5
 
-Comentar la línea que declara el objeto I2C y descomentar la correspondiente a SPI:
+Comentar la línea que declara el objeto I2C y descomentar la
+correspondiente a SPI:
 
 .. code-block:: c 
    :lineno-start: 33
@@ -134,7 +737,7 @@ Comentar la línea que declara el objeto I2C y descomentar la correspondiente a 
 
 A continuación se observa el código completo:
 
-.. code-block:: c 
+.. code-block:: cpp
    :lineno-start: 1
 
     /***************************************************************************
@@ -229,7 +832,7 @@ Al ejecutar el código el resultado será algo similar a esto::
     Temperature = 25.44 *C
     Pressure = 850.51 hPa
     Approx. Altitude = 1452.61 m
-    Humidity = 51.67 %
+    Humidity = 51.67 %S
 
     Temperature = 25.43 *C
     Pressure = 850.43 hPa
@@ -241,161 +844,102 @@ Al ejecutar el código el resultado será algo similar a esto::
     Approx. Altitude = 1453.03 m
     Humidity = 51.67 %
 
-La temperatura se reporta como un número en punto flotante en grados centígrados. La presión se reporta como un número 
-en punto flotante en Pascales. Note que el valor de presión se divide por el literal 100.0F (constante en punto flotante) 
-para convertir a hecto Pascales el resultado. Para el cálculo de la altitud aproximada, es necesario pasar la presión 
-sobre el nivel del mar de la ciudad al día y hora de la prueba en unidades de hecto Pascales. Finalmente se reporta la humdad 
-relativa en punto flotante.
+La temperatura se reporta como un número en punto flotante en
+grados centígrados. La presión se reporta como un número en punto
+flotante en Pascales. Note que el valor de presión se divide por
+el literal 100.0F (constante en punto flotante) para convertir
+a hecto Pascales el resultado. Para el cálculo de la altitud
+aproximada, es necesario pasar la presión sobre el nivel del mar
+de la ciudad al día y hora de la prueba en unidades de hecto
+Pascales. Finalmente se reporta la humada relativa en punto flotante.
 
 Análisis de la biblioteca SPI y la hoja de datos del sensor
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Abra el `código fuente <https://github.com/adafruit/Adafruit_BME280_Library/blob/master/Adafruit_BME280.cpp>`__ 
+#############################################################
+
+Abra el `código fuente <https://github.com/adafruit/Adafruit_BME280_Library/blob/master/Adafruit_BME280.cpp>`__
 de la biblioteca del sensor.
 
-* Analice el código del constructor de la clase. ¿Qué estrategia utilizan para diferenciar el SPI por hardware al SPI 
-  por software?
+* Analice el código del constructor de la clase. ¿Qué estrategia
+  utilizan para diferenciar el SPI por hardware al SPI por software?
 * ¿En qué parte del código se inicializa el objeto SPI?
-* Haciendo la lectura del código fuente, ¿Qué bit se envía primero, el de mayor peso o el de menor peso?
+* Haciendo la lectura del código fuente, ¿Qué bit se envía primero,
+  el de mayor peso o el de menor peso?
 * ¿Cuál modo de SPI utiliza el sensor?
 * ¿Cuál es la velocidad de comunicación?
-* El sensor soporta dos modos SPI. Leyendo la información en la hoja de datos, cómo sería posible configurar el modo?
-* ¿Cuál es el protocolo para escribir información en el sensor?
-* ¿Cuál es el protocolo para leer informacion del sensor?
-* Busque en el código fuente de la biblioteca,  ¿Dónde se lee el chip-ID del sensore BME280?
-* Muestre y explique detalladamente los pasos y el código para identificar el chip-ID. No olvide apoyarse de la hoja de datos
+* El sensor soporta dos modos SPI. Leyendo la información en la hoja
+  de datos, cómo sería posible configurar el modo?
+* ¿Cómo es el protocolo para escribir información en el sensor?
+* ¿Cómo es el protocolo para leer información del sensor?
+* Busque en el código fuente de la biblioteca,  ¿Dónde se lee
+  el chip-ID del sensore BME280?
+* Muestre y explique detalladamente los pasos y el código para identificar
+  el chip-ID. No olvide apoyarse de la hoja de datos
 * ¿Qué otros pasos se requieren para inicializar el sensor?
 
-/// SEMANA 4
+
+
+Sesión 2
+---------
+
 En esta sesión vamos a introducir el bus I2C (``Inter-Integrated Circuit``).
 
-ObjetivoEn esta sesión vamos a introducir el bus I2C (``Inter-Integrated Circuit``).
-
-----------
-Introducir de manera teórica y con ejemplos el bus I2C.
-
 Introducción a I2C
--------------------
-Para realizar la introducción al bus I2C vamos a utilizar el siguiente material de 
-referencia:
+^^^^^^^^^^^^^^^^^^^
+Para realizar la introducción al bus I2C vamos a utilizar el siguiente
+material de referencia:
 
 * `Presentación teórica <https://drive.google.com/open?id=1koxaaKxT7FhGBK2CITGljjGEOfgs1aYpfE1OZ70SmZ4>`__.
 
+Ejercicio
+^^^^^^^^^^
+En el material que se encuentra `aquí <https://docs.google.com/presentation/d/1Z5BEncGpW4RSQBqeRl1i-axLXDreKpHjHKo-QgXcKPY/edit?usp=sharing>`__
+encontrará algunos ejemplos de comunicación entre dispostivos
+utilizando el bus I2C. Algunos ejemplos muestran el uso del framework de
+arduino para la implementación de un maestro y un esclavo.
 
+Reto: evaluación formativa
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+El reto corresponde a la evaluación sumativa que se deberá comenzar en la
+casa y terminar la semana entrante.
 
-
-
-
-Esta semana vamos a realizar algunos retos relacionados con los buses I2C y SPI.
-Para el reto de esta primera sesión vamos a conectar un controlador a un sensor I2C. 
-El reto consiste en implementar, sólo con el API de arduino, la comunicación I2C con 
-el sensor. No vamos a buscar, ni utilizar bibliotecas para el sensor.
-
-El material que se encuentra 
-`aquí <https://drive.google.com/open?id=1Hg5zy4VJLpjAjO-xdBMAljGYHGpOJRmjZoIGko7Xldo>`__ 
-tiene algunos ejemplos de comunicación entre dispostivos utilizando el bus I2C. Algunos 
-ejemplos muestran el uso del framework de arduino para la implementación de un maestro y 
-un esclavo. Para el reto de esta sesión, sólo haremos uso del API I2C para el maestro.
-
-Ejercicios
------------
-
-Reto:
-^^^^^^^^
-En este reto vamos a conectar un sensor a un controlador mediante el bus I2C. 
+En este reto vamos a conectar un sensor a un controlador mediante el bus I2C.
 Este reto tendrá las siguientes consideraciones:
 
 * Lea todas las consideraciones hasta el final.
 
-* Reto personal: NO BUSCAR EN INTERNET la solución, NO BUSCAR EN INTERNET soluciones 
-  similares para basarse en ellas, SE PUEDE CONSULTAR la documentación de I2C de Arduino, 
+* Reto personal: NO BUSCAR EN INTERNET la solución, NO BUSCAR EN
+  INTERNET soluciones   similares para basarse en ellas, SE PUEDE
+  CONSULTAR la documentación de I2C de Arduino,
   es decir, el API, y las hojas de datos del sensor.
 
-* Se requiere construir un programa interactivo que reciba comandos enviados desde la 
-  terminal serial de arduino para interactuar con un reloj de tiempo real o RTC. Tener 
-  presente las siguientes consideraciones para este sensor:
-
+* Se requiere construir un programa interactivo en el ESP32 que reciba comandos
+  enviados desde una aplicación hecha con Unity. Al ESP32 vamos a conectar
+  un reloj de tiempo real o RTC, considerando:
+  
     * Detectar si el sensor está conectado al sistema de cómputo.
     * Configurar la hora, minutos, segundos y el formato 12H o 24H.
-    * Configurar el día, mes, año y día de la semana. 
+    * Configurar el día, mes, año y día de la semana.
     * Leer la hora completa (horas, minutos, segundos).
-    * Leer la fecha completa (día, mes, año y día de la semana). 
+    * Leer la fecha completa (día, mes, año y día de la semana).
     * Almacenar información en la RAM interna del dispositivo.
     * Leer información de la RAM interna del dispositivo.
 
-* `Hoja de datos <https://datasheets.maximintegrated.com/en/ds/DS1307.pdf>`__ 
-  del circuito integrado del sensor: 
+* `Hoja de datos <https://datasheets.maximintegrated.com/en/ds/DS1307.pdf>`__
+  del circuito integrado del sensor:
 
 * Documentación oficial de arduino: https://www.arduino.cc/en/Reference/Wire
 
 * Información del `sensor <http://robotdyn.com/wifi-d1-mini-shield-rtc-ds1307-real-time-clock-with-battery.html>`__
 
-* `Planos <http://robotdyn.com/pub/media/0G-00005695==D1mini-SHLD-RTCDS1307/DOCS/Schematic==0G-00005695==D1mini-SHLD-RTCDS1307.pdf>`__ 
+* `Planos <http://robotdyn.com/pub/media/0G-00005695==D1mini-SHLD-RTCDS1307/DOCS/Schematic==0G-00005695==D1mini-SHLD-RTCDS1307.pdf>`__
   del sensor.
 
-* En los planos se puede ver un circuito convertidor bidireccionar de 3.3V a 5V similar a 
-  `este <https://cdn.sparkfun.com/datasheets/BreakoutBoards/Logic_Level_Bidirectional.pdf>`__
+* En los planos se puede ver un circuito convertidor bidireccional
+  de 3.3V a 5V similar a `este <https://cdn.sparkfun.com/datasheets/BreakoutBoards/Logic_Level_Bidirectional.pdf>`__
 
 * Tenga presente los niveles de alimentación del sensor: 5V, 3.3V, GND.
 
-* La interfaz I2C será a 3.3V. Las resistencias de pullup ya están en el sensor como puede
-  observar en los planos.
-
-
-Evaluación sumativa número 1
------------------------------
-
-Descripción: construir una aplicación interactiva utilizando Unity, un sensor I2C, un sensor SPI y 
-controlador y el framework de arduino.
-
-Requisitos
-------------
-
-* El sensor I2C será un RTC, el sensor SPI será un sensor de temperatura, presión y altitud. Estas son 
-  las variables a medir.Los sensores SPI pueden ser BMP280 o BME280.
-* Diseñar una interfaz de usuario en Unity agradable y fácil de usar para un usuario sin 
-  cononocimientos técnicos.
-* La aplicación presentará el valor de las variables.
-* La aplicación debe contar con un mecanismo de entrada en la interfaz de usuario que solicite el valor
-  de cada una de las variables de manera independiente. Solo debe actualizar el valor de la variable 
-  solicitada.
-* El valor de la variable deberá ser enriquecido con el instante de tiempo y la fecha de la última lectura.
-* Al iniciar la aplicación se debe presentar el valor de las variables y la hora y fecha de adquisición de 
-  cada una.
-* La aplicación deberá tener una opción para configurar el RTC a la hora y fecha correcta.
-* Diseñar un protocolo de integración entre la aplicación en Unity y el controlador.
-
-Valoración
-------------
-
-* Funcionamiento según los requisitos del cliente (40%).
-* Portafolio en internet con: video del funcionamiento con explicación (30%) y la 
-  documentación (informe escrito) (30%).
-* Informe escrito: debe explicar detalladamente cómo funciona la aplicación. 
-* Informe escrito: debe explicar detalladamente cómo está construida la aplicación. No olvide mencionar 
-  cada aspecto, es decir, programa en Unity, sensores, programa de arduino y PROTOCOLO de integración.
-
-Sustentación
--------------
-La sustentación se realizará el 23 de agosto en la sesión de clase. 
-Deberá traer todos los materiales necesarios para reproducir la aplicación solicitada 
-(Unity, arduino, sensores) y computador con las herramientas instaladas y configuradas.
-
-La sustentación consiste en realizar una modificación, cambio, adición, mejora a la aplicación solicitada.
-
-Valoración Final
------------------
-Nota final = (LO SOLICITADO ) * sustentación. Donde la sustentación tendrá un valor de 0 a 1 
-y será un factor multiplicativo de lo solicitado.
-
-Plazos
--------
-
-* Enviar al correo del profesor el enlace al portafolio indicando claramente donde está todo lo solicitado.
-* El plazo máximo es el jueves 29 de agosto de 2019 a las 12 de la noche para enviar el enlace con toda la información completa. 
-  Luego del plazo se penalizará la entrega 1 unidad hastas las 6 a.m. del 30 de agosto. Luego de esta hora, no se recibirán trabajos.
-* La sustentación es presencial. En caso de inasistencia debe solicitar autorización del director de la facultad para presentar 
-  supletorio.
-* La sustentación deberá ser entregada el 30 de agosto de 2019 antes de las 7:40 a.m. a un enlace suministrado por el profesor.
-
+* La interfaz I2C será a 3.3V. Las resistencias de pullup ya están en el sensor
+  como puede observar en los planos.
 

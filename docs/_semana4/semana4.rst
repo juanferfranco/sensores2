@@ -10,7 +10,7 @@ La solución al ejercicio se compone del código de Arduino
 para simular el sensor y el código de Unity para leer los
 datos del sensor.
 
-Códigod de Arduino
+Código de Arduino
 -------------------
 
 .. code-block:: cpp
