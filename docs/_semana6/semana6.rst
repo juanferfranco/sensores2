@@ -47,7 +47,16 @@ Código de arduino
               x = x - 1;
               y = y - 1;
               z = z - 1;
-            }BME280Pinout.jpeg
+            }
+            else countUp = true;
+          }
+        }
+      }
+    }
+
+
+Código de Unity
+^^^^^^^^^^^^^^^^^^^
 
 El código para el protocolo:
 
@@ -150,14 +159,6 @@ El código del controlador:
         [Tooltip("Maximum number of unread data messages in the queue. " +
                 "New messages will be discarded.")]
         public int maxUnreadMessages = 1;
-El código del controlador:
-
-.. code-block:: csharp
-    :linenos:
-
-        [Tooltip("Maximum number of unread data messages in the queue. " +
-                "New messages will be discarded.")]
-
         public const string SERIAL_DEVICE_CONNECTED = "__Connected__";
         public const string SERIAL_DEVICE_DISCONNECTED = "__Disconnected__";
 
@@ -629,7 +630,7 @@ Finalmente el código de la aplicación
 La configuración del proyecto queda como se muestra en la figura:
 
 .. image:: ../_static/unityProject.png
-   :scale: 40 %
+   :scale: 100 %
 
 Sesión 1
 -----------
@@ -658,7 +659,7 @@ Pinouts
 La siguiente figura muestra los pines del sensor a utilizar:
 
 .. image:: ../_static/BME280Pinout.jpeg
-   :scale: 100 %
+   :scale: 40 %
 
 Las señales tienen la siguiente función:
 
