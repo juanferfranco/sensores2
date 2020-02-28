@@ -3,7 +3,7 @@ Semana 7
 
 Sesión 1
 ----------
-En esta sesión vamos a revisar el el reto del viernes.
+En esta sesión vamos a revisar el reto del viernes.
 
 Sesión 2
 ----------
