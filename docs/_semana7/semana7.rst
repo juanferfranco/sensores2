@@ -1,15 +1,31 @@
 Semana 7
 ===========
 
-Esta semana trabajaremos intensamente tanto en las horas de trabajo autónomo
-como en clase, el reto de la semana pasada correspondiente a la evaluación
-formativa:
+Sesión 1
+----------
+En esta sesión vamos a revisar el el reto del viernes.
+
+Sesión 2
+----------
+
+En esta sesión vamos a introducir el bus I2C (``Inter-Integrated Circuit``).
+
+Introducción a I2C
+^^^^^^^^^^^^^^^^^^^
+Para realizar la introducción al bus I2C vamos a utilizar el siguiente
+material de referencia:
+
+* `Presentación teórica <https://drive.google.com/open?id=1koxaaKxT7FhGBK2CITGljjGEOfgs1aYpfE1OZ70SmZ4>`__.
+
+Ejercicio
+^^^^^^^^^^
+En el material que se encuentra `aquí <https://docs.google.com/presentation/d/1Z5BEncGpW4RSQBqeRl1i-axLXDreKpHjHKo-QgXcKPY/edit?usp=sharing>`__
+encontrará algunos ejemplos de comunicación entre dispostivos
+utilizando el bus I2C. Algunos ejemplos muestran el uso del framework de
+arduino para la implementación de un maestro y un esclavo.
 
 Reto: evaluación formativa
----------------------------
-
-El reto corresponde a la evaluación sumativa que se deberá comenzar en la
-casa y terminar la semana entrante.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 En este reto vamos a conectar un sensor a un controlador mediante el bus I2C.
 Este reto tendrá las siguientes consideraciones:
@@ -50,4 +66,8 @@ Este reto tendrá las siguientes consideraciones:
 
 * La interfaz I2C será a 3.3V. Las resistencias de pullup ya están en el sensor
   como puede observar en los planos.
+
+* Las comunicaciones entre Unity y el ESP32 deben realizarse siguiendo
+  un protocolo binario. Proponga el protocolo.
+
 

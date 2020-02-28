@@ -25,11 +25,11 @@ Código de arduino
 
       if (Serial.available()) {
         if (Serial.read() == 0x73) {
-          Serial.write((uint8_t)(x));
-          Serial.write( (uint8_t)(x >> 8 ));
-          Serial.write((uint8_t)(y));
+          Serial.write((uint8_t)( x & 0x00FF));
+          Serial.write( (uint8_t)( x >> 8 ));
+          Serial.write((uint8_t)( y & 0x00FF ));
           Serial.write((uint8_t)(y >> 8 ));
-          Serial.write((uint8_t)(z));
+          Serial.write((uint8_t)( z & 0x00FF ));
           Serial.write((uint8_t)(z >> 8 ));
 
           if (countUp == true) {
@@ -863,7 +863,7 @@ de la biblioteca del sensor.
 * ¿Cómo es el protocolo para escribir información en el sensor?
 * ¿Cómo es el protocolo para leer información del sensor?
 * Busque en el código fuente de la biblioteca,  ¿Dónde se lee
-  el chip-ID del sensore BME280?
+  el chip-ID del sensor BME280?
 * Muestre y explique detalladamente los pasos y el código para identificar
   el chip-ID. No olvide apoyarse de la hoja de datos
 * ¿Qué otros pasos se requieren para inicializar el sensor?
@@ -872,66 +872,110 @@ de la biblioteca del sensor.
 
 Sesión 2
 ---------
+En esta sesión vamos a retomar el reto del parcial y lo vamos a combinar
+con el sensor que acabamos de estudiar. Se propone hacer lo siguiente:
 
-En esta sesión vamos a introducir el bus I2C (``Inter-Integrated Circuit``).
+* Realice una aplicación en Unity que muestre en la pantalla el valor de
+  la presión, la  temperatura y la humedad.
+* La aplicación debe solicitar, con el byte 0x73, datos cada
+  100 ms.
+* El protocolo será binario. En total se enviarán 12 bytes, 4 bytes para
+  cada variable por ser un número en punto flotante.
+  El orden de envío será | presión | temperatura | humedad |
 
-Introducción a I2C
-^^^^^^^^^^^^^^^^^^^
-Para realizar la introducción al bus I2C vamos a utilizar el siguiente
-material de referencia:
+¿Cómo conseguir cada uno de los bytes que componente la variable?
 
-* `Presentación teórica <https://drive.google.com/open?id=1koxaaKxT7FhGBK2CITGljjGEOfgs1aYpfE1OZ70SmZ4>`__.
+* Para responder esta pregunta investigue utilizando el CoolTerm.
+* Considere de nuevo parte del código utilizado en el parcial:
 
-Ejercicio
-^^^^^^^^^^
-En el material que se encuentra `aquí <https://docs.google.com/presentation/d/1Z5BEncGpW4RSQBqeRl1i-axLXDreKpHjHKo-QgXcKPY/edit?usp=sharing>`__
-encontrará algunos ejemplos de comunicación entre dispostivos
-utilizando el bus I2C. Algunos ejemplos muestran el uso del framework de
-arduino para la implementación de un maestro y un esclavo.
+.. code-block:: cpp
+    :linenos:
 
-Reto: evaluación formativa
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    void setup() {
+      Serial.begin(115200);
 
-El reto corresponde a la evaluación sumativa que se deberá comenzar en la
-casa y terminar la semana entrante.
+    }
 
-En este reto vamos a conectar un sensor a un controlador mediante el bus I2C.
-Este reto tendrá las siguientes consideraciones:
+    void loop() {
+      static uint16_t x = 0;
 
-* Lea todas las consideraciones hasta el final.
+      if (Serial.available()) {
+        if (Serial.read() == 0x73) {
+          Serial.write((uint8_t)( x & 0x00FF ));
+          Serial.write( (uint8_t)(x >> 8 ));
+        }
+      }
+    }
 
-* Reto personal: NO BUSCAR EN INTERNET la solución, NO BUSCAR EN
-  INTERNET soluciones   similares para basarse en ellas, SE PUEDE
-  CONSULTAR la documentación de I2C de Arduino,
-  es decir, el API, y las hojas de datos del sensor.
+Note cómo la operación (x >> 8 ) permite conseguir el byte de mayor
+peso de el entero no signado de 16 bits x.
 
-* Se requiere construir un programa interactivo en el ESP32 que reciba comandos
-  enviados desde una aplicación hecha con Unity. Al ESP32 vamos a conectar
-  un reloj de tiempo real o RTC, considerando:
-  
-    * Detectar si el sensor está conectado al sistema de cómputo.
-    * Configurar la hora, minutos, segundos y el formato 12H o 24H.
-    * Configurar el día, mes, año y día de la semana.
-    * Leer la hora completa (horas, minutos, segundos).
-    * Leer la fecha completa (día, mes, año y día de la semana).
-    * Almacenar información en la RAM interna del dispositivo.
-    * Leer información de la RAM interna del dispositivo.
+* Ahora intentemos la misma técnica para conseguir los bytes del float:
 
-* `Hoja de datos <https://datasheets.maximintegrated.com/en/ds/DS1307.pdf>`__
-  del circuito integrado del sensor:
+.. code-block:: cpp
+    :linenos:
 
-* Documentación oficial de arduino: https://www.arduino.cc/en/Reference/Wire
+    void setup() {
+        Serial.begin(115200);
+    }
 
-* Información del `sensor <http://robotdyn.com/wifi-d1-mini-shield-rtc-ds1307-real-time-clock-with-battery.html>`__
+    void loop() {
+        float num = 1.1;
 
-* `Planos <http://robotdyn.com/pub/media/0G-00005695==D1mini-SHLD-RTCDS1307/DOCS/Schematic==0G-00005695==D1mini-SHLD-RTCDS1307.pdf>`__
-  del sensor.
+        if (Serial.available()) {
+            if (Serial.read() == 0x73) {
+                Serial.write((uint8_t)( num ));
+                Serial.write( (uint8_t)(num >> 8 ));
+                Serial.write( (uint8_t)(num >> 16 ));
+                Serial.write( (uint8_t)(num >> 32 ));
+            }
+        }
+    }
 
-* En los planos se puede ver un circuito convertidor bidireccional
-  de 3.3V a 5V similar a `este <https://cdn.sparkfun.com/datasheets/BreakoutBoards/Logic_Level_Bidirectional.pdf>`__
+El 1.1 en punto flotante será el 3f 8c cc cd
 
-* Tenga presente los niveles de alimentación del sensor: 5V, 3.3V, GND.
+* ¿Pudo compilar el programa?
 
-* La interfaz I2C será a 3.3V. Las resistencias de pullup ya están en el sensor
-  como puede observar en los planos.
+Note que al intentar compilar, el compilador le dirá que no es posible
+aplicar el operador >> al tipo float.
+
+* Debemos entonces aplicar una técnica diferente para obtener los bytes
+  del float:
+
+.. code-block:: cpp
+    :linenos:
+
+    void setup() {
+        Serial.begin(115200);
+    }
+
+    void loop() {
+        // 45 60 55 d5
+        // https://www.h-schmidt.net/FloatConverter/IEEE754.html
+        static float num = 3589.3645;
+    
+        static uint8_t arr[4] = {0};
+
+        if(Serial.available()){
+            if(Serial.read() == 0x73){
+                memcpy(arr,(uint8_t *)&num,4);
+                Serial.write(arr,4);
+            }
+        }
+    }
+
+En este caso estamos guardando los 4 bytes que componen el float
+en un arreglo, arr, para luego transmitir dicho arreglo.
+
+* ¿En qué orden estamos transmitiendo los bytes, en bigEndian o en
+  littleEndian?
+
+* Para leer los datos en la aplicación en Unity necesitaremos hacer
+  la acción opuesta, es decir, a partir de los 4 bytes debemos
+  construir el número en punto flotante. Para hacerlo investigue
+  `esta <https://docs.microsoft.com/en-us/dotnet/api/system.bitconverter?view=netframework-4.8>`__
+  clase de C#.
+* En qué orden debemos organizar los bytes para poder hacer la conversión?
+
+
 
