@@ -908,7 +908,7 @@ con el sensor que acabamos de estudiar. Se propone hacer lo siguiente:
     }
 
 Note cómo la operación (x >> 8 ) permite conseguir el byte de mayor
-peso de el entero no signado de 16 bits x.
+peso del entero no signado de 16 bits x.
 
 * Ahora intentemos la misma técnica para conseguir los bytes del float:
 
