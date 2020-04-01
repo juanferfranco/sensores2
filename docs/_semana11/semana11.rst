@@ -1,109 +1,8 @@
 Semana 11
 ===========
-
-Objetivos
-----------
-
-1. Integrar sensores y actuadores con dispositivos de cómputo utilizando WiFi
-
-Ejercicio 1:
---------------
-Analice el funcionamiento del siguiente código escrito en processing:
-
-.. code-block:: java
-   :lineno-start: 1
-
-    import processing.net.*;
-
-
-    final int MAXCLIENTS = 2;
-
-    Server myServer;
-    Client myclients[] = new Client[MAXCLIENTS];
-    int numberOfClients = 0;
-    int val = 0;
-
-    void setup() {
-    size(200, 200);
-    myServer = new Server(this, 5204);
-    }
-    
-    void draw() {
-    val = (val + 1) % 255;
-    background(val);
-
-    for (int i = 0; i<MAXCLIENTS; i++) {
-        Client clientConnected = myclients[i];
-        if (clientConnected != null) {
-        if (clientConnected.active()) {
-            if(clientConnected.available()>0){
-            String line = clientConnected.readStringUntil('>');
-            myServer.write(line);
-            myServer.write("\r\n");
-            sendGroup();
-            }
-        } else {
-            myclients[i] = null;
-        }
-        }
-    }
-    }
-
-    void sendGroup(){
-    Client clientToSend;
-    for (int i = 0; i<MAXCLIENTS; i++) {
-        clientToSend = myclients[i];
-        if (clientToSend != null) {
-        if (clientToSend.active()) {
-            clientToSend.write("Hello\r\n");
-        } else {
-            myclients[i] = null;
-        }
-        }
-    }
-    }
-
-
-    void serverEvent(Server someServer, Client someClient) {
-    int i;
-    for (i = 0; i<MAXCLIENTS; i++) {
-        if (myclients[i] ==null) {
-        myclients[i] = someClient;
-        println("We have a new client: " + someClient.ip());
-        break;
-        }
-    }
-    if (i == MAXCLIENTS) {
-        println("Client: " + someClient.ip()+ " is rejected");
-        someClient.stop();
-    }
-    }
-
-¿Qué hace el programa? Corra el programa y conecte clientes utilizando un simulador como
- `hercules <https://www.hw-group.com/software/hercules-setup-utility>`__.
-
-Ejercicio 2:
--------------
-Utilizando como base el código anterior realice un programa que permita leer el valor de un sensor BME280 y modificar 
-el estado de un LED. El programa correrá en un computador y el sensor y actuador en un ESP32.
-
-Ejercicio 3:
--------------
-Simule dos sensores y actuadores más, para un total de 3.
-
-Sustentación
--------------
-
-`Aquí <https://drive.google.com/open?id=1wlD7Lxjqr7CV8DbnAp_7Y5KiCOVtX5JeoEEPrFzTvD4>`__ está
-el enunciado de la sustentación.
-
-
-
-Semana 10
-===========
-
-
-
+Esta semana vamos a trabajar en otro protocolo de transporte que nos permite
+conectar sensores y actuadres en red inalámbrica. Se trata de UDP (la semana
+pasada trabajamos TCP).
 
 Sesión 1
 -----------
@@ -329,45 +228,13 @@ paquete. De esta manera el bridge sabrá que el dato llegó a su destino.
 
 Ejercicio: despliegue del ejercicio
 ------------------------------------
-Este ejercicio lo vamos a realizar en equipo.
+Para desplegar este ejercicio necesitamos varios dispositivos: PC, celular, ESP32.
 
 Para desplegar el ejercicio es necesario identificar claramente las direcciones IP de cada 
 uno de los actuadores remotos.
 
-Utilice un ESP32 para cada actuador y un ESP32 para el bridge.
+Utilice un ESP32 para cada actuador y un ESP32 para el bridge. Como en este caso no contamos
+con tantos dispositivos entonces:
 
-Utilice el programa Hercules para simular la aplicación del PC.
-
-Sesión 2
----------
-En esta sesión veremos una aplicación interesante que combina dispositivos embebidos (IoT) 
-con realidad aumentada. 
-La aplicación consiste en realizar tracking a una imagen y aumentarla mostrando un modelo 
-3D (en este caso un simple 
-cubo) sobre la imagen. Adicionalmente, el material del modelo 3D cambiará de color en base 
-al valor reportado por un 
-sensor. La aplicación embebida correrá en la plataforma `photon <https://docs.particle.io/photon/>`__ de la empresa 
-`particle <https://www.particle.io/>`__. La aplicación de realidad aumentada funcionará en 
-Unity con el SDK Vuforia. 
-Ambas aplicaciones se conectarán por medio de un servidor al cual el sensor enviará datos y 
-del cual Unity leerá la información para actualizar el color del material del modelo.
-
-El siguiente video muestra un Demo corto de la aplicación:
-
-.. raw:: html
-
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-        <iframe src="https://www.youtube.com/embed/oskw30HNovk" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
-
-|
-
-Objetivos
-----------
-Integrar sensores y actuadores con aplicaciones de realidad aumentada.
-
-Procedimiento:
----------------
-En el siguiente `enlace <https://drive.google.com/open?id=1R3AjLGbDifl_GxH8NB0PRxy_kFN-0ZLYxMqYboIb1Qk>`__ se encuentra una
-guía que consiste en cuatro laboratorios que permiten construir paso a paso la aplicación.
-
+* Usar el ESP32 como bridge y como actuadores el celular y el computador.
+* Utilice el programa Hercules para simular la aplicación del PC y los actuadores.
