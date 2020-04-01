@@ -11,12 +11,12 @@ integrar sensores y actuadores utilizando WiFi. En ests sesión vamos a utilizar
 UDP.
 
 Objetivo de la sesión
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Integrar sensores y actuadores con dispositivos de cómputo utilizando WiFi y el protocolo UDP.
 
 Ejercicio: analizar el código
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Para explorar `UDP <https://www.arduino.cc/en/Reference/WiFi>`__ vamos a realizar un proyecto 
 simple que ilustra el uso del protocolo. Se trata de un conjunto de actuadores distribuidos 
@@ -227,7 +227,7 @@ En el ejemplo mostrado, note que un actuador distribuido responderá al bridge c
 paquete. De esta manera el bridge sabrá que el dato llegó a su destino.
 
 Ejercicio: despliegue del ejercicio
-------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Para desplegar este ejercicio necesitamos varios dispositivos: PC, ESP32.
 
 Para desplegar el ejercicio es necesario identificar claramente las direcciones IP de cada 
@@ -238,3 +238,20 @@ con tantos dispositivos entonces:
 
 * Usar el ESP32 como bridge y como actuadores el celular y el computador.
 * Utilice los programas Hercules para simular la aplicación del PC y los actuadores.
+
+Sesión 2
+---------
+En esta sesión vamos a practicar las comunicaciones por UDP.
+
+
+RETO 
+^^^^^^
+Se trata de un programa en el PC que se comunica con un controlador ESP32. El controlador
+tiene conectados un sensor y un actuador.
+
+* Utilizar como referencia los códigos de la sesión 1.
+* Use hércules para simular un programa en el computador que solicitará leer el sensor y modificar el actuador.
+* El ESP32 tendrá conectado un BME280 o BMP280 y un LED (actuador).
+* Desde el programa del PC debemos leer el valor del sensor y cambiar el estado del LED
+* Usted debe definir el protocolo que utilizará. Puede seleccionar entre un protocolo binario
+  o ascii.
