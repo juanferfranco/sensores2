@@ -228,7 +228,7 @@ paquete. De esta manera el bridge sabrá que el dato llegó a su destino.
 
 Ejercicio: despliegue del ejercicio
 ------------------------------------
-Para desplegar este ejercicio necesitamos varios dispositivos: PC, celular, ESP32.
+Para desplegar este ejercicio necesitamos varios dispositivos: PC, ESP32.
 
 Para desplegar el ejercicio es necesario identificar claramente las direcciones IP de cada 
 uno de los actuadores remotos.
@@ -237,4 +237,4 @@ Utilice un ESP32 para cada actuador y un ESP32 para el bridge. Como en este caso
 con tantos dispositivos entonces:
 
 * Usar el ESP32 como bridge y como actuadores el celular y el computador.
-* Utilice el programa Hercules para simular la aplicación del PC y los actuadores.
+* Utilice los programas Hercules para simular la aplicación del PC y los actuadores.
