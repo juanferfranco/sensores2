@@ -62,7 +62,7 @@ Sesión 2
 Reto 
 ^^^^^^
 Una vez analizado el material, se propone realizar una aplicación simple en Unity que se conecte 
-con una aplicación como hercules y luego se conecte a un sensor.
+con una aplicación como hercules.
 
 Reto 
 ^^^^^^
