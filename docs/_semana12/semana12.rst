@@ -32,6 +32,7 @@ Entrega
       * Tercero, indicar qué dificultades tuvo solucionando los retos y cómo las superó.
 
 * Subir el trabajo `aquí <https://www.dropbox.com/request/ZxUAJ0pdUo1ZIGxkRT0m>`__
+* El plazo es hasta el viernes 17 de abril hasta las 11:59 p.m.
 
 Nota Final
 ^^^^^^^^^^^^
