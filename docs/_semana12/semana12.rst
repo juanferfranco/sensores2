@@ -63,9 +63,9 @@ Sesión 2
 Reto 
 ^^^^^^
 Una vez analizado el material, se propone realizar una aplicación simple en Unity que se conecte 
-con una aplicación como hercules.
+con una aplicación como hercules. (Y si te animas a conectarlo con el celular en vez de hércules?)
 
 Reto 
 ^^^^^^
-Repita el reto anterior, pero esta vez haga que Unity que se conecte 
-con un sensor.
+Repita el reto anterior, pero esta vez conecte Unity con un ESP32. Recuerde, haga que el sensor
+envíe datos y Unity los reciba. 
