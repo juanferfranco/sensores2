@@ -43,7 +43,7 @@ Cronograma
 Evaluación
 -----------
 
-Serán 5 parciales acumulativos del 20% cada uno.
+Serán 5 parciales acumulativos del 10%, 25%, 30%, 25% y 10%.
 
 Dedicación
 ----------
