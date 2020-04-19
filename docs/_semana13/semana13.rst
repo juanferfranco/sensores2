@@ -1,72 +1,46 @@
 Semana 13
 ===========
 
+Recuerden que esta semana no tendremos encuentros sincrónicos. Vamos
+a destinar las 9 horas de esta semana en la realización de la Evaluación
+y la sustentación de la misma.
 
-De la semana 12:
+Evaluación 4
+-------------
 
+Enunciado
+^^^^^^^^^^^^
+* Hacer una aplicación interactiva utilizando Unity versión 2019.3.10f1
+* Conectar un controlador a la aplicación utilizando UDP y WiFi.
+* El controlador debe tener un actuador y un sensor.
+* El actuador es digital, puede ser un LED.
+* El sensor será un BME o BMP 280.
+* La aplicación interactiva deberá tener en su UI elementos que permitan modificar
+  el actuador y visualizar el 3 variables del sensor.
+* El controlador debe reportar cada 100 ms el valor del sensor.
+* DISEÑE E IMPLEMENTE UN PROTOCOLO BINARIO para comunicar el controlador
+  y la aplicación interactiva.
 
-Esta semana vamos a conectar sensores y actuadores a una plataforma de implementación de 
-aplicaciones interactivas.
+Entrega
+^^^^^^^^^^^^
+* Crear una carpeta. En esa carpeta incluir el proyecto Unity completo, el proyecto de arduino y un archivo .pdf.
+* Comprimir todos los archivos en formato .ZIP, no .RAR, no 7ZIP. SOLO .ZIP
+* El archivo .pdf debe tener: su nombre y el enlace al video con las sustentación.
+* El video sustentación debe tener los siguientes elementos:
 
-Material
----------
-En `este enlace <https://drive.google.com/open?id=1rkSL-DyORk19jfnax9FUph7jeXIgKb4Zl1eBfyVtQrQ>`__ 
-se encuentra el material para la sesión 1
+    * INTRODUCCIÓN: indicar si implementó todas las características del reto y en caso contrario
+      cuáles le faltaron y por qué le faltaron. 
+    * DEMOSTRACIÓN: mostrar funcionando el sistema completo.
+    * EXPLICACIÓN: explicar en datalle la aplicación en Unity y la aplicación en el arduino así:
 
-Reto 1
--------
-Una vez analizado el material, se propone realizar una aplicación simple en Unity que se conecte 
-con una aplicación como hercules y luego se conecte a un sensor.
+      * Primero explicar en un TABLERO electrónico (poor ejemplo sketch.io) cuál es la arquitectura de los programas, que partes tiene,
+        cómo es el concepto de su solución y por qué lo solucionó de esta manera y cómo es el esquema de direccionamiento
+        donde indique direcciones IP y puertos.
+      * Segundo, EXPLICAR en el tablero cómo es el protocolo.
+      * Tercero, explicar el código de Unity y de arduino.
+      * Cuarto, explicar cómo implementó el protocolo.
+      * Quinto, indicar qué dificultades tuvo y cómo las superó.
 
-Reto 2
--------
-Incrementar la aplicación anterior con dos sensores y un actuador. Cada sensor y el actuador 
-debe tener su propia dirección IP.
+* Subir el trabajo `aquí <https://www.dropbox.com/request/Ei2SSjGDnaPI4ReFtvkP>`__
+* El plazo es hasta el viernes 24 de abril hasta las 6 p.m.
 
-Proyecto Final
-----------------
-* Diseñar e implementar una experiencia interactiva que integre 2 sensores y un actuador a 
-  Unity utilizando el protocolo de transporte UDP. Los sensores DEBEN tener interfaz serial,  
-  I2C o SPI. Los sensores y actuador DEBEN ser 3 DISPOSITIVOS INDEPENDIENTES cada uno con 
-  su propia dirección IP.
-
-* Presentar el diseño el viernes 11 de octubre.
-
-* Preentrega con la implementación el lunes 28 de octubre.
-
-* Entrega Final el viernes 1 de noviembre. Realizar una presentación con explicación 
-  del sistema (1 unidad en la nota), DEMO del funcionamiento (3 unidad en la nota), 
-  mostrar el portafolio (1 unidad en la nota).
-
-
-
-
-
-
-
-
-
-
-
-
-
-Esta semana veremos varias maneras de provisionar la red WiFi a los 
-sensores/actuadores y diferentes maneras de asignar la dirección de IP.
-
-Sesión 1
----------
-* ¿Cómo provisionar la red WiFi?
-* ¿Cómo configurar en el enrutador direcciones IP según la dirección MAC 
-  de cada dispositivo?
-
-Sesión 2
----------
-En esta sesión realizaremos la presentación del diseño de cada una de las 
-experiencias finales. Se presentará el concepto y las caracterísitcas 
-técnicas del sistema.
-
-Material Adicional
---------------------
-Para provisionar el ESP8266 contamos con la biblioteca `WiFiManager <https://github.com/tzapu/WiFiManager>`__. Sin embargo,
-para el ESP32 la biblioteca anterior aún no es compatible. Otra biblioteca 
-que podemos utilizar para este último procesador es `IotWebConf <https://github.com/prampec/IotWebConf>`__.
