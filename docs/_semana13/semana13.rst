@@ -2,7 +2,7 @@ Semana 13
 ===========
 
 Recuerden que esta semana no tendremos encuentros sincrónicos. Vamos
-a destinar las 9 horas de esta semana en la realización de la Evaluación
+a destinar las 9 horas de esta semana a la realización de la Evaluación
 y la sustentación de la misma.
 
 Evaluación 4
