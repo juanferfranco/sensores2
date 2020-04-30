@@ -14,7 +14,8 @@ Considere:
 * Realice una aplicación para cada dispositivo.
 * El ESP32 deberá tener un actuador y un sensor.
 * Para el celular deberá hacer una aplicación en Unity o TouchOSC que
-  permitan modificar un GameObject y leer alguno de los sensores del dispositivo.
+  permitan modificar un GameObject y leer alguno de los sensores del dispositivo
+  o un elemento de la interfaz de usuario (sliders, toggles, etc).
 * La aplicación del computador será la aplicación principal.  Su función será:
 
    * Activar el actuador del ESP32.
