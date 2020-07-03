@@ -1,12 +1,18 @@
-Curso Sensores y Actuadores 2 / 2020-10
+Curso Sensores y Actuadores 2 / 2020-20
 ========================================
+
+Docente diseñador del curso: Juan Fernando Franco Higuita
+
+Nombre del docente moderador: Juan Fernando Franco Higuita
+
+Créditos y horas totales del curso: 3 créditos - 144 horas totales
+
 
 ¿Para qué sirve este curso?
 -----------------------------
 
 Este curso sirve para aprender a integrar sistemas de cómputo con sensores y
 actuadores inteligentes que utilizan buses y redes de comunicación.
-
 
 Descripción del curso
 ----------------------
@@ -16,7 +22,7 @@ sistemas de cómputo para la producción de experiencias interactivas.
 ¿Cómo se diferencia este curso de controladores y sensores 1?
 --------------------------------------------------------------
 Sensores 2 se concentra en técnicas de programación avanzadas y la
-intregración de sensores y actuadores que utilizan interfaces de red.
+integración de sensores y actuadores que utilizan interfaces de red.
 
 Propósito del curso
 ---------------------
@@ -32,23 +38,58 @@ a requerimientos condicionados por el contexto.
 
 Estructura y metodología del curso
 -----------------------------------
-En las sesiones de trabajo autónomo se deben realizar lecturas del material
-teórico, así como también trabajar en los ejercicios prácticos. En las
-sesiones presenciales se realizarán lecturas cortas y ejercicios prácticos.
+El curso está dividido en 5 unidades que se realizarán en 16
+semanas. Cada unidad tendrá asociada una actividad de aprendizaje a realizar
+en 8 fases:
+
+* Fase 1: motivación. En esta fase se presentará la actividad de aprendizaje
+  de la unidad, su relación con las competencias del curso y la carrera, se
+  presentarán las acciones de aprendizaje, la rúbrica y la evidencia
+  correspondiente a la evaluación sumativa de la unidad.
+* Fase 2: diagnóstico-repaso. En esta fase se presentarán una serie de
+  preguntas y ejercicios que buscan la AUTOEVALUACIÓN de los conocimientos
+  previos necesarios para abordar la actividad de aprendizaje de la unidad.
+* Fase 3: fundamentación. En esta fase se entregará el material teórico-práctico
+  necesarios para abordar el RETO de la unidad. 
+* Fase 4: ejercicios y discusión. Esta fase está compuesta por una serie de
+  ejercicios preparatorios para el RETO de la unidad. Estos ejercicios se
+  abordarán de manera individual y colaborativa.
+* Fase 5: retroalimentación. En esta fase se revisará de manera grupal la
+  solución de los ejercicios. El estudiante podrá realizar acciones de mejora
+  a sus ejercicios.
+* Fase 6: RETO. En esta fase se propone el RETO evaluativo de la unidad.
+* Fase 7: sustentación. Una vez realizado el RETO, la fase de sustentación
+  busca realizar un ejercicio metacognitivo y de síntesis. Mediante un video
+  el estudiante presenta su solución y la analiza.
+* Fase 8: retroalimentación. Esta fase presentará la solución del docente y
+  de algunos compañeros. También permiterá realizar acciones de mejora al
+  RETO realizado.
+
+Contenido
+----------
+#. Unidad 1: repaso sensores 1
+#. Unidad 2: plataforma ESP32
+#. Unidad 3: sensores y actuadores SPI
+#. Unidad 4: sensores y actuadores I2C
+#. Unidad 5: sensores y actuadores por red WiFi
 
 Cronograma
 -----------
-`Tabla de actividades <https://docs.google.com/spreadsheets/d/1TsIwGMqmu62L3DBw6-IkAhFtcRBOiIn-KtFkwsphKUs/edit?usp=sharing>`__.
+#. Unidad 1: semanas 1,2,3
+#. Unidad 2: semanas 4,5,6
+#. Unidad 3: semanas 7,8,9
+#. Unidad 4: semanas 10,11,12
+#. Unidad 5: semanas 13,14,15,16.
 
 Evaluación
 -----------
 
-Serán 5 parciales acumulativos del 10%, 25%, 30%, 25% y 10%.
+Serán 5 parciales acumulativos del 20% cada uno correspondiente a las 5 unidades del curso.
 
 Dedicación
 ----------
-Este curso es de 3 créditos repartidos en 4 horas de trabajo en el aula y 5
-horas de trabajo autónomo.
+Este curso es de 3 créditos repartidos en 4 horas de trabajo sincrónico mediado por teórico
+y 5 horas de trabajo autónomo.
 
 .. toctree::
    :maxdepth: 3
@@ -57,16 +98,3 @@ horas de trabajo autónomo.
    Semana1 <_semana1/semana1>
    Semana2 <_semana2/semana2>
    Semana3 <_semana3/semana3>
-   Semana4 <_semana4/semana4>
-   Semana5 <_semana5/semana5>
-   Semana6 <_semana6/semana6>
-   Semana7 <_semana7/semana7>
-   Semana8 <_semana8/semana8>
-   Semana9 <_semana9/semana9>
-   Semana10 <_semana10/semana10>
-   Semana11 <_semana11/semana11>
-   Semana12 <_semana12/semana12>
-   Semana13 <_semana13/semana13>
-   Semana14 <_semana14/semana14>
-   Semana15 <_semana15/semana15>
-   Semana16 <_semana16/semana16>
