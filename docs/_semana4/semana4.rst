@@ -98,7 +98,7 @@ Ten cuenta los siguientes ítems de funcionamiento:
     pueden encontrar cada una de las secciones solicitadas en el video.
 
 * Comprime la carpeta principal en formato .ZIP
-* Entrega el archivo .ZIP `aquí <https://upbeduco-my.sharepoint.com/:f:/g/personal/juanf_franco_upb_edu_co/ElJszzl9uABAnqoyRfiRRSoBP0j9wj9Cnlu6gs-C793pKA`__
+* Entrega el archivo .ZIP `aquí <https://upbeduco-my.sharepoint.com/:f:/g/personal/juanf_franco_upb_edu_co/ElJszzl9uABAnqoyRfiRRSoBP0j9wj9Cnlu6gs-C793pKA>`__
   antes de la sesión del 14 de agosto a las 10 a.m. En esta sesión realizaremos la retroalimentación final.
 
 ¿Qué deberá tener el video de sustentación?
