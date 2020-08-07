@@ -88,36 +88,18 @@ Ten cuenta los siguientes ítems de funcionamiento:
 ¿Qué debes entregar?
 ######################
 
-* Crea una carpeta, la llamaras principal. 
-* En la carpeta principal guarda una copia de la `rúbrica <https://docs.google.com/spreadsheets/d/1_SnplUHVGTYiaCIoOhpE8pIeao14Ch0AjKFVGRYM0W4/edit?usp=sharing>`__
-  con tu autoevaluación.
-* En la carpeta principal guarda un archivo .pdf donde colocarás dos cosas:
-  
-  * UN ENLACE a tu ONE DRIVE donde estará alojado el video de sustentación.
-  * Una tabla de contenidos que indique el instante de tiempo en el cual se
-    pueden encontrar cada una de las secciones solicitadas en el video.
+Esta vez vamos a realizar la sustentación de RETO
+en la última sesión de la semana 6 y en tiempo real.
 
-* Comprime la carpeta principal en formato .ZIP
-* Entrega el archivo .ZIP `aquí <>`__.
+Para ello prepara:
 
-¿Qué deberá tener el video de sustentación?
-#############################################
-
-* Máximo 20 minutos: debes planear el video tal como aprendiste en segundo 
-  semestre en tu curso de narrativa audiovisual.
-* Cuida la calidad del audio y del video.
-* Sección 1: introducción, donde dirás tu nombre y si realizaste el RETO
-  completo. Si no terminaste indica claramente qué te faltó y por qué.
-* Sección 2: explica la arquitectura de tu solución. Cómo funciona la app móvil,
-  cómo funciona la plataforma ESP32. Realiza las máquinas de estado que modelan
-  la solución en el ESP32.
-* Sección 3: explica el código de tus soluciones. 
-* Sección 4: realiza una demostración de funcionamiento de tu solución.
-* Sección 5: explica cómo vas a probar cada programa por separado y en conjunto 
-* Sección 6: muestra que tu programa funciona según los escenarios de prueba
-  identificados.
-* Tus explicaciones deben ser claras, precisas y completas. No olvides planear 
-  bien tu video de sustentación.
+* Una demostración de tu trabajo funcionando
+* Estudia de nuevo tu proyecto y prepárate para responder
+  algunas preguntas relacionadas con los puntos de la
+  `rúbrica <https://docs.google.com/spreadsheets/d/1_SnplUHVGTYiaCIoOhpE8pIeao14Ch0AjKFVGRYM0W4/edit?usp=sharing>`__,
+  es decir, preguntas relacionadas con el modelo (¿Cómo funciona?), con la
+  implementación y con las pruebas que hiciste para comprabar el funcionamiento
+  del RETO.
 
 Trayecto de acciones, tiempos y formas de trabajo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
