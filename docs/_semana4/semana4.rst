@@ -88,15 +88,23 @@ Ten cuenta los siguientes ítems de funcionamiento:
 ¿Qué debes entregar?
 ######################
 
-Esta vez vamos a realizar la sustentación de RETO
+* Crea una carpeta, la llamaras principal. 
+* En la carpeta principal guarda una copia de la `rúbrica <https://docs.google.com/spreadsheets/d/1_SnplUHVGTYiaCIoOhpE8pIeao14Ch0AjKFVGRYM0W4/edit?usp=sharing>`__
+  con tu autoevaluación.
+* Guarda el proyecto del ESP32 y de la app móvil.
+* Comprime la carpeta principal en formato .ZIP
+* Entrega el archivo .ZIP `aquí <https://upbeduco-my.sharepoint.com/:f:/g/personal/juanf_franco_upb_edu_co/EmXf22H3PgNArlDNcs9xJVYBlBCHQKSy5FzdoiNd0F5NkA>`__
+
+Para la sustentación
+######################
+Esta vez vamos a realizar la sustentación del RETO
 en la última sesión de la semana 6 y en tiempo real.
 
 Para ello prepara:
 
 * Una demostración de tu trabajo funcionando
 * Estudia de nuevo tu proyecto y prepárate para responder
-  algunas preguntas relacionadas con los puntos de la
-  `rúbrica <https://docs.google.com/spreadsheets/d/1_SnplUHVGTYiaCIoOhpE8pIeao14Ch0AjKFVGRYM0W4/edit?usp=sharing>`__,
+  algunas preguntas relacionadas con los puntos de la rúbrica,
   es decir, preguntas relacionadas con el modelo (¿Cómo funciona?), con la
   implementación y con las pruebas que hiciste para comprabar el funcionamiento
   del RETO.
