@@ -93,7 +93,7 @@ Ten cuenta los siguientes ítems de funcionamiento:
   con tu autoevaluación.
 * Guarda el proyecto del ESP32 y de la app móvil.
 * Comprime la carpeta principal en formato .ZIP
-* Entrega el archivo .ZIP `aquí <https://upbeduco-my.sharepoint.com/:f:/g/personal/juanf_franco_upb_edu_co/EmXf22H3PgNArlDNcs9xJVYBlBCHQKSy5FzdoiNd0F5NkA>`__
+* Entrega el archivo .ZIP `aquí <https://auladigital.upb.edu.co/mod/assign/view.php?id=621964>`__
 
 Para la sustentación
 ######################
