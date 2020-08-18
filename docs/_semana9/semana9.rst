@@ -1,19 +1,33 @@
-Semana 9
-===========
+Semana 9: Unidad 3 - sensores y actuadores SPI
+=================================================
 
-Durante la sesión 1 y 2 de esta semana se debe realizar la evaluación
-sumativa 2. Dicha evaluación estará basada en los ejercicios realizados con
-Unity, I2C y SPI.
+Actividad 7
+############################
 
-La evaluación consiste en:
+* Fecha: septiembre 2 de 2020 - 10 a.m. 
+* Descripción: implementa el reto
+* Recursos: mira el ejercicio
+* Duración de la actividad: 5 horas
+* Forma de trabajo: individual con solución de dudas en tiempo real
 
-* La entrega del código para Unity y para Arduino.
-* Un documento corto donde muestre y explique detalladamente cómo es
-  el protocolo binario.
-* Un video así:
-    * Que muestre cada una de las caracterísiticas de las aplicaciones.
-    * La explicación DETALLADA de cómo se implementó cada característica.
-* PLAZO: lunes 23 de marzo a las 12 del MEDIO DÍA.
+Implementa el reto y soluciona dudas en tiempo real con el docente.
 
-En este `enlace <https://docs.google.com/document/d/18WPvOCWm6tDtjgv9BcOWVB54q1Y-k2gjLryIYXkRo3A/edit?usp=sharing>`__
-se encuentra el enunciado, condiciones y criterios de evaluación.
+Actividad 8
+############################
+
+* Fecha: septiembre 2 a septiembre 4 de 2020
+* Descripción: termina el reto
+* Recursos: mira el ejercicio
+* Duración de la actividad: 5 horas
+* Forma de trabajo: individual con solución de dudas en tiempo real
+
+
+Actividad 9
+######################
+* Fecha: septiembre 4 de 2020 - 10 a.m.
+* Descripción: sustentación
+* Recursos: ingresa al grupo de Teams
+* Duración de la actividad: 1 hora 40 minutos.
+* Forma de trabajo: grupal
+
+Realiza la sustentación de tu trabajo

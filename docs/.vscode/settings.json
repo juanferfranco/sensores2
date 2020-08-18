@@ -1,10 +1,18 @@
 {
-    "python.pythonPath": "/usr/bin/python3",
+    "python.pythonPath": "C:\\Python38\\python.exe",
     "restructuredtext.confPath": "${workspaceFolder}",
     "cSpell.language": "en,es",
     "cSpell.words": [
         "Ardity",
+        "actuadores",
+        "cent",
+        "centígrados",
+        "descomentar",
         "evaluativo",
+        "grados",
+        "hecto",
+        "inicializa",
+        "inicializar",
         "prototipado",
         "sumativa"
     ]
