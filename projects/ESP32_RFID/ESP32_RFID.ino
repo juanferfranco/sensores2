@@ -1,6 +1,3 @@
-#include <Arduino.h>
-
-
 //#define DEBUG
 #ifdef DEBUG
 #define DEBUG_PRINT(msg,value) Serial.print(msg); Serial.println(value)

@@ -123,3 +123,94 @@ de trabajo semanal. Cada semana tendremos dos encuentros sincrónicos
 donde podrás realizar las entrevistas de visto bueno para elaborar
 el proyecto y para presentarlo. Así mismo, podrás usar este espacio
 para recibir asesoría grupal y personalizada con el docente.
+
+
+Actividades de cada unidad
+----------------------------
+
+Actividad 1: encuentros sincrónicos
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Fechas: martes y jueves a las 8 a.m.
+* Descripción: asesorías en tiempo real y evaluación.
+* Recursos: ingresa a `Discord <https://discord.gg/vC5RaagNcE>`__
+* Duración de la actividad: sesiones de 1:40. 
+* Forma de trabajo: individual-colaborativo/sincrónico
+
+Actividad 2: preparación para el proyecto
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Descripción: realiza los ejercicios, retos y preguntas
+  propuestas.
+* Recursos: trayecto de actividades en cada unidad.
+* Duración de la actividad: depende de ti.
+* Forma de trabajo: individual-colaborativo
+
+Actividad 3: proyecto y sustentación
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Descripción: realiza el proyecto, usa las herramientas
+  de control de versión y productividad y actualiza
+  tu portafolio.
+* Duración de la actividad: depende de ti.
+* Forma de trabajo: individual.
+
+Evidencias de evaluación
+-------------------------
+
+Código de honor
+^^^^^^^^^^^^^^^^
+
+Para realizar el trabajo de cada unidad se espera que hagas lo siguiente:
+
+* Colabora con tus compañeros cuando así se indique.
+* Trabaja de manera individual cuando la actividad así te lo
+  proponga.
+* No busques la solución a los proyectos porque DAÑARÍAS tu
+  proceso de aprendizaje. Recuerda, se trata de seguir un camino
+  y aprender en el recorrido.
+* ¿Entonces qué hacer si no me funciona algo? Te propongo que
+  experimentes, crea hipótesis, experimenta de nuevo, observa y concluye.
+* NO OLVIDES, este curso se trata de pensar y experimentar NO de
+  BUSCAR soluciones en Internet.
+
+Detalle de las evidencias  
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Vamos a utilizar dos herramientas para la presentación de evidencias, tanto
+para los ejercicios de preparación como para el proyecto.
+
+* GitHub
+* `Notion <https://www.notion.so>`__
+
+En GitHub mantendrás todo tu código bajo control de versión y
+debe reflejar un flujo de trabajo. Debes evidenciar el flujo
+de trabajo.
+
+En Notion vas a presentar tu portafolio para cada proyecto.
+El formato de tu portafolio es libre. Mira estos dos referentes:
+
+* `Internacional <https://momentfactory.com/work>`__. 
+* `Local <http://www.dreamhousestudios.co/#psortfolio>`__.
+
+Ten presente que deberás incluir al menos lo siguiente:
+
+* ¿De qué se trataba el proyecto? ¿Cuál era el problema a resolver?
+
+* Incluye el contrato de tu proyecto: requisitos funcionales
+  y no funcionales. Recuerda que este contrato lo debes negociar
+  con el profesor para cada proyecto de cada unidad.
+
+* Presenta tus resultados: muestra videos y fotos del proyecto funcionando.
+  Recuerda que estás vendiendo tus habilidades y mostrando lo que eres
+  capaz de hacer.
+
+* Muestra cómo son tus procesos en cada fase: conceptualización, diseño, producción
+
+* Muestra los resultados de cada fase: listas de tareas, cronogramas, diagramas
+  de arquitectura, planos, maquetas.
+
+* No olvides dejar un enlace a tu repositorio público en GitHub.
+
+¿Cómo inicio con Notion? Te dejo `aquí <https://www.youtube.com/watch?v=0iS_E9tN8nk>`__
+un enlace.
