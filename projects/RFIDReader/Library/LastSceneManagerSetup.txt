@@ -1,4 +1,5 @@
 sceneSetups:
-- path: Assets/Ardity/Scenes/DemoScene_CustomDelimiter.unity
+- path: Assets/Ardity/Scenes/DemoScene_RFIDProtocol.unity
   isLoaded: 1
   isActive: 1
+  isSubScene: 0
