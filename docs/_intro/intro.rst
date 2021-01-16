@@ -14,7 +14,7 @@ interactivas.
 
 En el curso se aprenderá a integrar sensores y actuadores que utilizan
 buses de comunicación I2C y SPI y protocolos de comunicación inalámbricos
-como Bluetooth y WiFi. Este curso busca que el estudiante emplee todas
+en una red WiFi. Este curso busca que el estudiante emplee todas
 estas posibilidades de comunicación para diseñar e implementar aplicaciones
 interactivas de tiempo real distribuidas. 
 
