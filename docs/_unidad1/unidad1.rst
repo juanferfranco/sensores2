@@ -684,3 +684,20 @@ El código de Arduino de lo puedes encontrar
 El código de Unity está `aquí <https://github.com/juanferfranco/sensores2/tree/master/projects/RFIDReader>`__ 
 
 La escena donde está la implementación se llama DemoScene_RFIDProtocol.
+
+Ejercicio 6: proyecto
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Ahora piensa que quieres hacer de proyecto; sin embargo, ten presente estos
+elementos mínimos:
+
+* Debes incluir dos dispositivos seriales, es decir, tu aplicación
+  interactiva debe manejar simultáneamente dos puertos.
+
+* En un puerto implementarás un protocolo ASCII y en el otro un protocolo binario.
+
+* La configuración (puerto serial, velocidad, etc) y el control de tu aplicación
+  interactiva debe realizarse mediante una interfaz de usuario gráfica.
+
+Recuerda que antes de comenzar el proyecto debes reunirte con tu profesor para discutir
+los conceptos de la unidad y obtener luz verde para comenzar a trabajar en tu proyecto.
