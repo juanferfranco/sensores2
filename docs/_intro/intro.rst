@@ -89,7 +89,7 @@ Contenido
 Cronograma
 -----------
 
-Te sugiere completar cada unidad en los siguientes tiempos
+Te sugiero completar cada unidad en los siguientes tiempos
 
 #. Unidad 1: semanas 1,2,3,4.
 #. Unidad 2: semanas 5,6,7,8.
