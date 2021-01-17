@@ -98,22 +98,24 @@ Te sugiero completar cada unidad en los siguientes tiempos
 
 Evaluación
 -----------
+Cada unidad tiene un peso del 25% en la nota final. 
 
-Durante el curso se realizarán cuatro proyectos, cada uno del
-25%.
+La unidad solo se considera terminada cuando termines todos los ejercicios y
+los proyectos que están en ella al 100%. Por tanto, la nota de cada unidad, 
+una vez la termines, será 5.
 
-El proyecto solo se considera presentado cuando la rúbrica de
-evaluación en cada item llegue al 100%. Puedes entregar
-tu proyecto cuando quieras, pero considera lo siguiente:
+Puedes entregar cada unidad cuando quieras, pero considera lo siguiente:
 
-* En la semana 8 se hará un primer corte del 50% y se reportarán
-  al sistema los proyectos que estén completos y entregados a
-  esa fecha. ¿Puedes entregar el proyecto luego? Si, en ese
-  momento tu nota será actualizada.
-* ¿Que pasa si en la semana 17 no he presentado el proyecto
-  de la unidad 4? se reporta con un 0. Por tanto, debes planear
-  tus tiempos para presentar a más tardar en la semana 17.
+En la semana 9 se hará un primer corte del 50% y se reportarán al sistema
+las unidades terminadas. Ten presente que la evaluación se realiza
+mediante una entrevista con el profesor en la cual discutirán los resultados
+de tu trabajo y recibirás retroalimentación personalizada. Para la semana 9
+deberías tener terminadas las unidades 1 y 2. Si no alcanzas, cuando las termines
+se actualizará tu nota.
 
+En la semana 17 se reportarán al sistema todas las unidades terminadas. ES MUY
+IMPORTANTE que tengas en cuenta que una unidad se considera terminada SI y SOLO
+si la completaste al 100% y realizaste el proceso de evaluación con el docente.
 
 Dedicación
 ----------
