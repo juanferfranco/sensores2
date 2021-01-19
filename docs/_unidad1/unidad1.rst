@@ -44,8 +44,8 @@ Ejercicio 1: control de versión
   solicita, por medio de tu cuenta de GitHub, el paquete de herramientas
   para estudiantes. Este proceso requiere aprobación, así que te recomiendo
   que lo hagas YA.
-* Ingresa a `este <https://www.youtube.com/c/Gitkraken/playlists>`__ canal
-  de youtube y observa la lista de reproducción Learn Git with GitKraken.
+* Ingresa a `este <https://www.gitkraken.com/learn/git/tutorials>`__ sitio 
+  para que aprendas los conceptos básicos de git.
 * Finalmente, observa el siguiente `video <https://www.youtube.com/watch?v=lYAHmthUO1M>`__
   para que analices un posible flujo de trabajo en equipo utilizando herramientas
   de control de versión. Ten en cuenta que puedes seguir exactamente el mismo
@@ -72,6 +72,26 @@ otros.
 Te pido entonces que de ahora en adelante todos los ejercicios que vamos
 a realizar los coloques bajo control de versión. ¿Para qué? para que
 practiques MUCHO!
+
+Como ANEXO a este ejercicio:
+
+Te voy a pedir que mires de nuevo `este <https://youtu.be/S03EEusFxoI>`__. 
+¿Por qué es importante para nosotros?
+Por que como tu sabrás cuando hacemos aplicaciones interactivas generamos
+varios archivos binarios. Por tanto git lfs será necesario en nuestros 
+proyectos. 
+
+Lo primero entonces que tendrás que hacer es instalar el soporte para Git LFS. 
+Mira `aquí <https://docs.github.com/en/github/managing-large-files/installing-git-large-file-storage>`__ 
+cómo lo harías para tu sistema operativo.
+
+Ahora observa `este <https://youtu.be/LS1VI1Y8WTM>`__ video y repasa con 
+`este <https://youtu.be/09McJ2NL7YM>`__ otro. Te explicarán cómo usar Unity con git lfs.
+
+Ten en cuenta que PUEDES usar lo que has aprendido con otras herramientas, no solo Unity.
+
+Por último te recomiendo que sigas las instrucciones del último video y practica la 
+creación de un proyecto en Unity con control de versión y lfs.
 
 Ejercicio 3: ESP32 
 ^^^^^^^^^^^^^^^^^^^^^
