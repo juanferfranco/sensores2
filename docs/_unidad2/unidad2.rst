@@ -1042,7 +1042,7 @@ Ahora le toca el turno a un sensor I2C. Observa de nuevo
 Ejercicio 11
 ^^^^^^^^^^^^^
 
-En base al material que leíste responde estas preguntas sobre el bus SPI:
+En base al material que leíste responde estas preguntas sobre el bus I2C:
 
 * ¿Cómo se conectan físicamente dos dispositivos?
 * ¿Qué debo hacer para conectar físicamente más de un sensor/actuador a un controlador?
