@@ -395,7 +395,7 @@ Y cómo quedaría entonces la aplicación:
     }
 
 
-Ejercicio 6: RETO
+Ejercicio 5: RETO
 ^^^^^^^^^^^^^^^^^^^
 
 Analiza con detenimiento el siguiente ejemplo. Te recomiendo que lo implementes
