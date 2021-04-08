@@ -523,7 +523,7 @@ utilizando un computador y un ESP32:
 Ejercicio 6: proyecto
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Ahora piensa que quieres hacer de proyecto; sin embargo, ten presente estos
+Ahora piensa qué quieres hacer de proyecto; sin embargo, ten presente estos
 elementos mínimos:
 
 * Debes incluir al menos dos ESP32.
