@@ -31,11 +31,11 @@ implementar en Unity el protocolo tu mismo. ¿Por qué?
 Como un ejercicio para comprender mejor el protocolo.
 
 La especificación del protocolo de comunicación OSC está 
-`aquí <http://opensoundcontrol.org/spec-1_0>`__.
+`aquí <http://cnmat.org/OpenSoundControl/OSC-spec.html>`__.
 
 ¿Cómo es un paquete OSC?
 
-En `este <http://opensoundcontrol.org/spec-1_0-examples>`__
+En `este <http://cnmat.org/OpenSoundControl/OSC-spec-examples.html>`__
 enlace se pueden ver algunos ejemplos de paquetes OSC.
 
 Para entender la estructura de los paquetes OSC ten en cuenta las siguientes consideraciones
